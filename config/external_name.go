@@ -10,7 +10,10 @@ import "github.com/crossplane/upjet/pkg/config"
 // provider.
 var ExternalNameConfigs = map[string]config.ExternalName{
 	// Import requires using a randomly generated ID from provider: nl-2e21sda
-	"null_resource": config.IdentifierFromProvider,
+	"harbor_project":              config.IdentifierFromProvider,
+	"harbor_robot_account":        config.IdentifierFromProvider,
+	"harbor_retention_policy":     config.IdentifierFromProvider,
+	"harbor_project_member_group": config.IdentifierFromProvider,
 }
 
 // ExternalNameConfigurations applies all external name configs listed in the

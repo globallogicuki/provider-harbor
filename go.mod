@@ -1,4 +1,4 @@
-module github.com/upbound/upjet-provider-template
+module github.com/globallogicuki/provider-harbor
 
 go 1.19
 

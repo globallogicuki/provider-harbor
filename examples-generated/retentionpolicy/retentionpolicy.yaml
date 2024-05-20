@@ -1,0 +1,33 @@
+apiVersion: retentionpolicy.crossplane.io/v1alpha1
+kind: RetentionPolicy
+metadata:
+  annotations:
+    meta.upbound.io/example-id: retentionpolicy/v1alpha1/retentionpolicy
+  labels:
+    testing.upbound.io/example-name: main
+  name: main
+spec:
+  forProvider:
+    rule:
+    - nDaysSinceLastPull: 5
+      repoMatching: '**'
+      tagMatching: latest
+    - nDaysSinceLastPush: 10
+      repoMatching: '**'
+      tagMatching: '{latest,snapshot}'
+    schedule: Daily
+    scope: ${harbor_project.main.id}
+
+---
+
+apiVersion: project.crossplane.io/v1alpha1
+kind: Project
+metadata:
+  annotations:
+    meta.upbound.io/example-id: retentionpolicy/v1alpha1/retentionpolicy
+  labels:
+    testing.upbound.io/example-name: main
+  name: main
+spec:
+  forProvider:
+    name: acctest

@@ -1,0 +1,15 @@
+apiVersion: project.crossplane.io/v1alpha1
+kind: Project
+metadata:
+  annotations:
+    meta.upbound.io/example-id: project/v1alpha1/project
+  labels:
+    testing.upbound.io/example-name: main
+  name: main
+spec:
+  forProvider:
+    enableContentTrust: true
+    enableContentTrustCosign: false
+    name: main
+    public: false
+    vulnerabilityScanning: true

@@ -1,36 +1,733 @@
-name: hashicorp/null
+name: goharbor/harbor
 resources:
-    null_resource:
+    harbor_config_auth:
         subCategory: ""
-        description: The null_resource resource implements the standard resource lifecycle but takes no further action. The triggers argument allows specifying an arbitrary set of values that, when changed, will cause the resource to be replaced.
-        name: null_resource
-        title: null_resource Resource - terraform-provider-null
+        name: harbor_config_auth
+        title: harbor_config_auth Resource - terraform-provider-harbor
         examples:
-            - name: cluster
+            - name: oidc
               manifest: |-
                 {
-                  "connection": [
+                  "auth_mode": "oidc_auth",
+                  "oidc_admin_group": "administrators",
+                  "oidc_auto_onboard": true,
+                  "oidc_client_id": "OIDC Client ID goes here",
+                  "oidc_client_secret": "ODDC Client Secret goes here",
+                  "oidc_endpoint": "https://login.microsoftonline.com/{GUID goes here}/v2.0",
+                  "oidc_name": "azure",
+                  "oidc_scope": "openid,email",
+                  "oidc_user_claim": "name",
+                  "oidc_verify_cert": true,
+                  "primary_auth_mode": true
+                }
+            - name: ldap
+              manifest: |-
+                {
+                  "auth_mode": "ldap_auth",
+                  "ldap_base_dn": "dc=example,dc=org",
+                  "ldap_search_dn": "cn=admin,dc=example,dc=org",
+                  "ldap_search_password": "Not@SecurePassw0rd",
+                  "ldap_uid": "email",
+                  "ldap_url": "openldap.default.svc.cluster.local:389",
+                  "ldap_verify_cert": false,
+                  "primary_auth_mode": true
+                }
+        argumentDocs:
+            auth_mode: '(String) Harbor authentication mode. Can be "oidc_auth", "db_auth" or "ldap_auth". (Default: "db_auth")'
+            id: (String) The ID of this resource.
+            ldap_base_dn: (String) A user's DN who has the permission to search the LDAP/AD server.
+            ldap_filter: (String) ldap filters
+            ldap_group_admin_dn: (String) Specify an LDAP group DN. All LDAP user in this group will have harbor admin privilege
+            ldap_group_base_dn: (String) The base DN from which to look up a group in LDAP/AD
+            ldap_group_filter: (String) The filter to look up an LDAP/AD group
+            ldap_group_gid: (String) The attribute used in a search to match a group
+            ldap_group_membership: (String) The attribute indicates the membership of LDAP group
+            ldap_group_scope: (String) The scope to search for groups
+            ldap_group_uid: (String) The attribute used in a search to match a user
+            ldap_scope: (String) LDAP Group Scope
+            ldap_search_dn: (String) The base DN from which to look up a user in LDAP/AD.
+            ldap_search_password: (String, Sensitive) The password for the user that will perform the LDAP search
+            ldap_uid: (String) The attribute used in a search to match a user. It could be uid, cn, email, sAMAccountName or other attributes depending on your LDAP/AD.
+            ldap_url: (String) The ldap server. Required when auth_mode is set to ldap.
+            ldap_verify_cert: (Boolean) Verify Cert from LDAP Server.
+            oidc_admin_group: (String) All members of this group get Harbor admin permissions.
+            oidc_auto_onboard: (Boolean) Default is "false", set to "true" if you want to skip the user onboarding screen, so user cannot change its username
+            oidc_client_id: (String) The client id for the oidc server.
+            oidc_client_secret: (String, Sensitive) The client secert for the oidc server.
+            oidc_endpoint: (String) The URL of an OIDC-complaint server.
+            oidc_group_filter: (String) The OIDC group filter to filter which groups could be onboarded to Harbor.
+            oidc_groups_claim: (String) The name of the claim in the token whose values is the list of group names.
+            oidc_name: (String) The name of the oidc provider name.
+            oidc_scope: (String) The scope sent to OIDC server during authentication. It has to contain “openid”.
+            oidc_user_claim: (String) Default is name
+            oidc_verify_cert: (Boolean) Set to false if your OIDC server is using a self-signed certificate.
+            primary_auth_mode: (Boolean) Default is false, set to true if you want to use the OIDC or LDAP mode as the primary auth mode.
+        importStatements: []
+    harbor_config_email:
+        subCategory: ""
+        name: harbor_config_email
+        title: harbor_config_email Resource - terraform-provider-harbor
+        examples:
+            - name: main
+              manifest: |-
+                {
+                  "email_from": "dont_reply@acme.com",
+                  "email_host": "server.acme.com"
+                }
+        argumentDocs:
+            email_from: (String) The email from address ie, dont_reply@acme.com
+            email_host: (String) The FQDN of the email server
+            email_insecure: '(Boolean) Disables validation of email server certificate Default: false'
+            email_password: (String, Sensitive) The password for the email server
+            email_port: '(Number) The smtp port for the email server Default: 25'
+            email_ssl: (Boolean) Enable SSL for email server connection
+            email_username: (String) The username for the email server
+            id: (String) The ID of this resource.
+        importStatements: []
+    harbor_config_security:
+        subCategory: ""
+        name: harbor_config_security
+        title: harbor_config_security Resource - terraform-provider-harbor
+        examples:
+            - name: main
+              manifest: |-
+                {
+                  "cve_allowlist": [
+                    "CVE-456",
+                    "CVE-123"
+                  ],
+                  "expires_at": "1701167767"
+                }
+        argumentDocs:
+            creation_time: (String) Time of creation of the list.
+            cve_allowlist: (List of String) System allowlist. Vulnerabilities in this list will be ignored when pushing and pulling images. Should be in the format or ["CVE-123", "CVE-145"] or ["CVE-123"]
+            expires_at: (Number) The time for expiration of the allowlist, in the form of seconds since epoch. This is an optional attribute, if it's not set the CVE allowlist does not expire.
+            id: (String) The ID of this resource.
+            update_time: (String) Time of update of the list.
+        importStatements:
+            - |-
+              # import using the id of the repo
+              terraform import harbor_config_security.main "7"
+    harbor_config_system:
+        subCategory: ""
+        name: harbor_config_system
+        title: harbor_config_system Resource - terraform-provider-harbor
+        examples:
+            - name: main
+              manifest: |-
+                {
+                  "project_creation_restriction": "adminonly",
+                  "robot_name_prefix": "harbor@",
+                  "robot_token_expiration": 30,
+                  "storage_per_project": 100
+                }
+        argumentDocs:
+            id: (String) The ID of this resource.
+            project_creation_restriction: (String) Who can create projects within Harbor. Can be "adminonly" or "everyone"
+            read_only: (Boolean) Whether or not the system is in read only mode.
+            robot_name_prefix: (String) Robot account prefix.
+            robot_token_expiration: (Number) The amount of time in days a robot account will expire.
+            scanner_skip_update_pulltime: (Boolean) Whether or not to skip update pull time for scanner.
+            storage_per_project: (Number) Default quota space per project in GIB. Default is -1 (unlimited).
+        importStatements: []
+    harbor_garbage_collection:
+        subCategory: ""
+        name: harbor_garbage_collection
+        title: harbor_garbage_collection Resource - terraform-provider-harbor
+        examples:
+            - name: main
+              manifest: |-
+                {
+                  "delete_untagged": true,
+                  "schedule": "Daily",
+                  "workers": 1
+                }
+        argumentDocs:
+            delete_untagged: (Boolean) Allow garbage collection on untagged artifacts.
+            id: (String) The ID of this resource.
+            schedule: (String) Sets the schedule how often the Garbage Collection will run.  Can be to "hourly", "daily", "weekly" or can be a custom cron string ie, "5 4 * * *"
+            workers: (Number) Number of workers to run the garbage collection, value must be between 1 and 5.
+        importStatements: []
+    harbor_group:
+        subCategory: ""
+        name: harbor_group
+        title: harbor_group Resource - terraform-provider-harbor
+        examples:
+            - name: storage-group
+              manifest: |-
+                {
+                  "group_name": "storage-group",
+                  "group_type": 3,
+                  "ldap_group_dn": "storage-group"
+                }
+        argumentDocs:
+            group_name: (String) The name of the group.
+            group_type: '(Number) 3. Note: group type 3 is OIDC group.'
+            id: (String) The ID of this resource.
+            ldap_group_dn: (String) The distinguished name of the group within AD/LDAP.
+        importStatements:
+            - terraform import harbor_group.storage-group /usergroups/19
+    harbor_immutable_tag_rule:
+        subCategory: ""
+        name: harbor_immutable_tag_rule
+        title: harbor_immutable_tag_rule Resource - terraform-provider-harbor
+        examples:
+            - name: main
+              manifest: |-
+                {
+                  "disabled": true,
+                  "project_id": "${harbor_project.main.id}",
+                  "repo_matching": "**",
+                  "tag_excluding": "latest",
+                  "tag_matching": "v2.*"
+                }
+              references:
+                project_id: harbor_project.main.id
+              dependencies:
+                harbor_project.main: |-
                     {
-                      "host": "${element(aws_instance.cluster.*.public_ip, 0)}"
+                      "name": "acctest"
+                    }
+        argumentDocs:
+            disabled: (Boolean) Specify if the rule is disable or not. Defaults to false
+            id: (String) The ID of this resource.
+            project_id: (String) The project id of which you would like to apply this policy.
+            repo_excluding: (String) For the repositories excluding.
+            repo_matching: (String) For the repositories matching.
+            tag_excluding: (String) For the tag excluding.
+            tag_matching: (String) For the tag matching.
+        importStatements:
+            - terraform import harbor_immutable_tag_rule.main /projects/4/immutabletagrules/25
+    harbor_interrogation_services:
+        subCategory: ""
+        name: harbor_interrogation_services
+        title: harbor_interrogation_services Resource - terraform-provider-harbor
+        examples:
+            - name: main
+              manifest: |-
+                {
+                  "default_scanner": "Clair",
+                  "vulnerability_scan_policy": "Daily"
+                }
+        argumentDocs:
+            default_scanner: (String) Sets the default interrogation service "Clair"
+            id: (String) The ID of this resource.
+            vulnerability_scan_policy: (String) The frequency of the vulnerability scanning is done. This can be Daily, Weekly, Monthly or can be a custom cron string.
+        importStatements: []
+    harbor_label:
+        subCategory: ""
+        name: harbor_label
+        title: harbor_label Resource - terraform-provider-harbor
+        examples:
+            - name: main
+              manifest: |-
+                {
+                  "color": "#FF0000",
+                  "description": "Description to for acceptance test",
+                  "name": "accTest"
+                }
+            - name: main
+              manifest: |-
+                {
+                  "color": "#FFFFFF",
+                  "description": "Description for acceptance test",
+                  "name": "accTest",
+                  "project_id": "${harbor_project.main.id}"
+                }
+              references:
+                project_id: harbor_project.main.id
+              dependencies:
+                harbor_project.main: |-
+                    {
+                      "name": "acctest"
+                    }
+        argumentDocs:
+            color: '(String) The color of the label within harbor (Default: #FFFFF)'
+            description: (String) The Description of the label within harbor
+            id: (String) The ID of this resource.
+            name: (String) The of name of the label within harbor.
+            project_id: (String) The id of the project with harbor.
+            scope: (String)
+        importStatements:
+            - terraform import harbor_label.main /labels/1
+    harbor_project:
+        subCategory: ""
+        name: harbor_project
+        title: harbor_project Resource - terraform-provider-harbor
+        examples:
+            - name: main
+              manifest: |-
+                {
+                  "enable_content_trust": true,
+                  "enable_content_trust_cosign": false,
+                  "name": "main",
+                  "public": false,
+                  "vulnerability_scanning": true
+                }
+            - name: main
+              manifest: |-
+                {
+                  "name": "acctest",
+                  "registry_id": "${harbor_registry.docker.registry_id}"
+                }
+              references:
+                registry_id: harbor_registry.docker.registry_id
+              dependencies:
+                harbor_registry.docker: |-
+                    {
+                      "endpoint_url": "https://hub.docker.com",
+                      "name": "test",
+                      "provider_name": "docker-hub"
+                    }
+        argumentDocs:
+            cve_allowlist: (List of String) Project allowlist allows vulnerabilities in this list to be ignored in this project when pushing and pulling images. Should be in the format or ["CVE-123", "CVE-145"] or ["CVE-123"]
+            deployment_security: '(String) Prevent deployment of images with vulnerability severity equal or higher than the specified value. Images must be scanned before this takes effect. Possible values: "critical", "high", "medium", "low", "none". (Default: "" - empty)'
+            enable_content_trust: '(Boolean) Enables Content Trust for project. When enabled it queries the embedded docker notary server. (Default: false).'
+            enable_content_trust_cosign: '(Boolean) Enables Content Trust Cosign for project. When enabled it queries Cosign. (Default: false)'
+            force_destroy: (Boolean) A boolean that indicates all repositories should be deleted from the project so that the project can be destroyed without error. These repositories are not recoverable.
+            id: (String) The ID of this resource.
+            name: (String) The name of the project that will be created in harbor.
+            project_id: (Number) The project id of this resource.
+            public: '(Boolean) The project will be public accessibility.(Default: false)'
+            registry_id: (Number) To enable project as Proxy Cache.
+            storage_quota: (Number) The storage quota of the project in GB's.
+            vulnerability_scanning: '(Boolean) Images will be scanned for vulnerabilities when push to harbor. (Default: true)'
+        importStatements:
+            - terraform import harbor_project.main /projects/1
+    harbor_project_member_group:
+        subCategory: ""
+        name: harbor_project_member_group
+        title: harbor_project_member_group Resource - terraform-provider-harbor
+        examples:
+            - name: main
+              manifest: |-
+                {
+                  "group_name": "testing1",
+                  "project_id": "${harbor_project.main.id}",
+                  "role": "projectadmin",
+                  "type": "oidc"
+                }
+              references:
+                project_id: harbor_project.main.id
+              dependencies:
+                harbor_project.main: |-
+                    {
+                      "name": "main"
+                    }
+        argumentDocs:
+            group_id: '(Number) 3. Note: group type 3 is OIDC group.'
+            group_name: (String) The name of the group member entity.
+            id: (String) The ID of this resource.
+            ldap_group_dn: (String) The distinguished name of the group within AD/LDAP.
+            member_id: (Number)
+            project_id: (String) The project id of the project that the entity will have access to.
+            role: (String) The permissions that the entity will be granted.
+            type: (String) The group type.  Can be set to "ldap", "internal" or "oidc".
+        importStatements:
+            - terraform import harbor_project_member_group.main /projects/10/members/200
+    harbor_project_member_user:
+        subCategory: ""
+        name: harbor_project_member_user
+        title: harbor_project_member_user Resource - terraform-provider-harbor
+        examples:
+            - name: main
+              manifest: |-
+                {
+                  "project_id": "${harbor_project.main.id}",
+                  "role": "projectadmin",
+                  "user_name": "testing1"
+                }
+              references:
+                project_id: harbor_project.main.id
+              dependencies:
+                harbor_project.main: |-
+                    {
+                      "name": "main"
+                    }
+        argumentDocs:
+            id: (String) The ID of this resource.
+            member_id: (Number) The member id of the member.
+            project_id: (String) The project id of the project that the entity will have access to.
+            role: (String) The permissions that the entity will be granted.
+            user_name: (String) The name of the member entity.
+        importStatements:
+            - terraform import harbor_project_member_user.main /projects/10/members/200
+    harbor_project_webhook:
+        subCategory: ""
+        name: harbor_project_webhook
+        title: harbor_project_webhook Resource - terraform-provider-harbor
+        examples:
+            - name: main
+              manifest: |-
+                {
+                  "address": "https://webhook.domain.com",
+                  "events_types": [
+                    "DELETE_ARTIFACT",
+                    "PULL_ARTIFACT",
+                    "PUSH_ARTIFACT",
+                    "QUOTA_EXCEED",
+                    "QUOTA_WARNING",
+                    "REPLICATION",
+                    "SCANNING_FAILED",
+                    "SCANNING_COMPLETED",
+                    "TAG_RETENTION"
+                  ],
+                  "name": "test_webhook",
+                  "notify_type": "http",
+                  "project_id": "${harbor_project.main.id}"
+                }
+              references:
+                project_id: harbor_project.main.id
+              dependencies:
+                harbor_project.main: |-
+                    {
+                      "name": "test-project"
+                    }
+        argumentDocs:
+            address: (String) The address of the webhook.
+            auth_header: (String) authentication header for you the webhook.
+            description: (String) A description of the webhook.
+            enabled: (Boolean) To enable / disable the webhook. Default true.
+            events_types: (List of String) The type events you want to subscript to can be
+            id: (String) The ID of this resource.
+            name: (String) The name of the webhook that will be created in harbor.
+            notify_type: (String) The notification type either http or slack.
+            project_id: (String) The project id of the harbor that webhook related to.
+            skip_cert_verify: (Boolean) checks the for validate SSL certificate.
+        importStatements: []
+    harbor_purge_audit_log:
+        subCategory: ""
+        name: harbor_purge_audit_log
+        title: harbor_purge_audit_log Resource - terraform-provider-harbor
+        examples:
+            - name: main
+              manifest: |-
+                {
+                  "audit_retention_hour": 24,
+                  "include_operations": "create,pull",
+                  "schedule": "Daily"
+                }
+        argumentDocs:
+            audit_retention_hour: (Number) To configure how long audit logs should be kept. For example, if you set this to 24 Harbor will only purge audit logs that are 24 or more hours old.
+            id: (String) The ID of this resource.
+            include_operations: (String) Valid values are create delete pull, thoses values can be comma separated. When Create, Delete, or Pull is set, Harbor will include audit logs for those operations in the purge.
+            schedule: (String) Sets the schedule how often the Garbage Collection will run.  Can be to "Hourly", "Daily", "Weekly" or can be a custom cron string ie, "5 4 * * *"
+        importStatements: []
+    harbor_registry:
+        subCategory: ""
+        name: harbor_registry
+        title: harbor_registry Resource - terraform-provider-harbor
+        examples:
+            - name: main
+              manifest: |-
+                {
+                  "endpoint_url": "https://hub.docker.com",
+                  "name": "test_docker_harbor",
+                  "provider_name": "docker-hub"
+                }
+        argumentDocs:
+            access_id: (String) The username / access id for the external container register.
+            access_secret: (String, Sensitive) The password / access keys / token for the external container register.
+            description: (String) The description of the external container register.
+            endpoint_url: (String) The url endpoint for the external container register ie "https://hub.docker.com"
+            id: (String) The ID of this resource.
+            insecure: '(Boolean) Verifies the certificate of the external container register. (Default: false)'
+            name: (String) The name of the register.
+            provider_name: (String) The name of the provider.
+            registry_id: (Number)
+            status: (String)
+        importStatements:
+            - terraform import harbor_registry.main /registries/7
+    harbor_replication:
+        subCategory: ""
+        name: harbor_replication
+        title: harbor_replication Resource - terraform-provider-harbor
+        examples:
+            - name: push
+              manifest: |-
+                {
+                  "action": "push",
+                  "name": "test_push",
+                  "registry_id": "${harbor_registry.main.registry_id}"
+                }
+              references:
+                registry_id: harbor_registry.main.registry_id
+              dependencies:
+                harbor_registry.main: |-
+                    {
+                      "endpoint_url": "https://hub.docker.com",
+                      "name": "test_docker_harbor",
+                      "provider_name": "docker-hub"
+                    }
+            - name: alpine
+              manifest: |-
+                {
+                  "action": "pull",
+                  "filters": [
+                    {
+                      "name": "library/alpine"
+                    },
+                    {
+                      "tag": "3.*.*"
+                    },
+                    {
+                      "resource": "artifact"
+                    },
+                    {
+                      "labels": [
+                        "qa"
+                      ]
                     }
                   ],
-                  "provisioner": {
-                    "remote-exec": [
-                      {
-                        "inline": [
-                          "bootstrap-cluster.sh ${join(\" \", aws_instance.cluster.*.private_ip)}"
-                        ]
-                      }
-                    ]
-                  },
-                  "triggers": {
-                    "cluster_instance_ids": "${join(\",\", aws_instance.cluster.*.id)}"
-                  }
+                  "name": "alpine",
+                  "registry_id": "${harbor_registry.main.registry_id}",
+                  "schedule": "0 0/15 * * * *"
                 }
+              references:
+                registry_id: harbor_registry.main.registry_id
               dependencies:
-                aws_instance.cluster: |-
+                harbor_registry.main: |-
                     {
-                      "count": 3
+                      "endpoint_url": "https://hub.docker.com",
+                      "name": "test_docker_harbor",
+                      "provider_name": "docker-hub"
                     }
-        argumentDocs: {}
+            - name: alpine
+              manifest: |-
+                {
+                  "action": "push",
+                  "filters": [
+                    {
+                      "name": "library/alpine"
+                    },
+                    {
+                      "tag": "3.*.*"
+                    }
+                  ],
+                  "name": "alpine",
+                  "registry_id": "${harbor_registry.main.registry_id}",
+                  "schedule": "event_based"
+                }
+              references:
+                registry_id: harbor_registry.main.registry_id
+              dependencies:
+                harbor_registry.main: |-
+                    {
+                      "endpoint_url": "https://hub.docker.com",
+                      "name": "test_docker_harbor",
+                      "provider_name": "docker-hub"
+                    }
+        argumentDocs:
+            action: (String)
+            decoration: (String) Matches or excludes the result. Can be one of the following. matches, excludes
+            deletion: '(Boolean) Specify whether to delete the remote resources when locally deleted. (Default: false)'
+            description: (String) Description of the replication policy.
+            dest_namespace: (String) Specify the destination namespace. if empty, the resource will be put under the same namespace as the source.
+            dest_namespace_replace: '(Number) Specify the destination namespace flattening policy. Integers from -1 to 3 are valid values in the harbor API. A value of -1 will ''Flatten All Levels'', 0 means ''No Flattening'', 1 ''Flatten 1 Level'', 2 ''Flatten 2 Levels'', 3 ''Flatten 3 Levels'' (Default: -1, see Replication Rules for more details)'
+            enabled: '(Boolean) Specify whether the replication is enabled. (Default: true)'
+            execute_on_changed: '(Boolean) Specify whether to execute the replication rule if new or modified. (Default: false)'
+            filters: (Block Set) (see below for nested schema)
+            id: (String) The ID of this resource.
+            labels: (List of String) Filter on the resource according to labels.
+            name: (String) The name of the replication.
+            override: '(Boolean) Specify whether to override the resources at the destination if a resources with the same name exist. (Default: true)'
+            registry_id: (Number) The registry ID of the Registry Endpoint.
+            replication_policy_id: (Number)
+            resource: (String) Filter on the resource type. Can be one of the following types. chart, artifact
+            schedule: '(String) The scheduled time of when the container register will be push / pull. In cron base format. Hourly "0 0 * * * *", Daily "0 0 0 * * *", Monthly "0 0 0 * * 0". Can be one of the following: event_based, manual, cron format (Default: manual)'
+            speed: (Number) The Maximum network bandwidth in Kbps for each execution. Default is -1 (unlimited).
+            tag: (String) Filter on the tag/version of the resource.
+        importStatements:
+            - terraform import harbor_replication.main /replication/policies/1
+    harbor_retention_policy:
+        subCategory: ""
+        name: harbor_retention_policy
+        title: harbor_retention_policy Resource - terraform-provider-harbor
+        examples:
+            - name: main
+              manifest: |-
+                {
+                  "rule": [
+                    {
+                      "n_days_since_last_pull": 5,
+                      "repo_matching": "**",
+                      "tag_matching": "latest"
+                    },
+                    {
+                      "n_days_since_last_push": 10,
+                      "repo_matching": "**",
+                      "tag_matching": "{latest,snapshot}"
+                    }
+                  ],
+                  "schedule": "Daily",
+                  "scope": "${harbor_project.main.id}"
+                }
+              references:
+                scope: harbor_project.main.id
+              dependencies:
+                harbor_project.main: |-
+                    {
+                      "name": "acctest"
+                    }
+        argumentDocs:
+            always_retain: (Boolean) retain always.
+            disabled: (Boolean) Specify if the rule is disable or not. Defaults to false
+            id: (String) The ID of this resource.
+            most_recently_pulled: (Number) retain the most recently pulled n artifacts.
+            most_recently_pushed: (Number) retain the most recently pushed n artifacts.
+            n_days_since_last_pull: (Number) retains the artifacts pulled within the lasts n days.
+            n_days_since_last_push: (Number) retains the artifacts pushed within the lasts n days.
+            repo_excluding: (String) For the repositories excluding.
+            repo_matching: (String) For the repositories matching.
+            rule: '(Block List, Min: 1, Max: 15) (see below for nested schema)'
+            schedule: (String) The schedule of when you would like the policy to run. This can be Hourly, Daily, Weekly or can be a custom cron string.
+            scope: (String) The project id of which you would like to apply this policy.
+            tag_excluding: (String) For the tag excluding.
+            tag_matching: (String) For the tag matching.
+            untagged_artifacts: (Boolean) with untagged artifacts. Defaults to true
+        importStatements:
+            - terraform import harbor_retention_policy.main /retentions/10
+    harbor_robot_account:
+        subCategory: ""
+        name: harbor_robot_account
+        title: harbor_robot_account Resource - terraform-provider-harbor
+        examples:
+            - name: system
+              manifest: |-
+                {
+                  "description": "system level robot account",
+                  "level": "system",
+                  "name": "example-system",
+                  "permissions": [
+                    {
+                      "access": [
+                        {
+                          "action": "create",
+                          "resource": "label"
+                        }
+                      ],
+                      "kind": "system",
+                      "namespace": "/"
+                    },
+                    {
+                      "access": [
+                        {
+                          "action": "push",
+                          "resource": "repository"
+                        }
+                      ],
+                      "kind": "project",
+                      "namespace": "${harbor_project.main.name}"
+                    },
+                    {
+                      "access": [
+                        {
+                          "action": "pull",
+                          "resource": "repository"
+                        }
+                      ],
+                      "kind": "project",
+                      "namespace": "*"
+                    }
+                  ],
+                  "secret": "${resource.random_password.password.result}"
+                }
+              references:
+                permissions.namespace: harbor_project.main.name
+                secret: resource.random_password.password.result
+              dependencies:
+                harbor_project.main: |-
+                    {
+                      "name": "main"
+                    }
+                random_password.password: |-
+                    {
+                      "length": 12,
+                      "special": false
+                    }
+            - name: project
+              manifest: |-
+                {
+                  "description": "project level robot account",
+                  "level": "project",
+                  "name": "example-project",
+                  "permissions": [
+                    {
+                      "access": [
+                        {
+                          "action": "pull",
+                          "resource": "repository"
+                        },
+                        {
+                          "action": "push",
+                          "resource": "repository"
+                        }
+                      ],
+                      "kind": "project",
+                      "namespace": "${harbor_project.main.name}"
+                    }
+                  ]
+                }
+              references:
+                permissions.namespace: harbor_project.main.name
+              dependencies:
+                harbor_project.main: |-
+                    {
+                      "name": "main"
+                    }
+        argumentDocs:
+            access: '(Block Set, Min: 1) (see below for nested schema)'
+            action: (String) Eg. push, pull, read, etc. Check available actions.
+            description: (String) The description of the robot account will be displayed in harbor.
+            disable: (Boolean) Disables the robot account when set to true.
+            duration: (Number) By default, the robot account will not expire. Set it to the amount of days until the account should expire.
+            effect: (String) Either allow or deny. Defaults to allow.
+            full_name: (String)
+            id: (String) The ID of this resource.
+            kind: (String) Either system or project.
+            level: (String) Level of the robot account, currently either system or project.
+            name: (String) The name of the project that will be created in harbor.
+            namespace: (String) namespace is the name of your project. For kind system permissions, always use / as namespace. Use * to match all projects.
+            permissions: '(Block Set, Min: 1) (see below for nested schema)'
+            resource: (String) Eg. repository, labels, etc. Check available resources.
+            robot_id: (String)
+            secret: (String, Sensitive) The secret of the robot account used for authentication. Defaults to random generated string from Harbor.
+        importStatements:
+            - terraform import harbor_robot_account.system /robots/123
+    harbor_tasks:
+        subCategory: ""
+        name: harbor_tasks
+        title: harbor_tasks Resource - terraform-provider-harbor
+        examples:
+            - name: main
+              manifest: |-
+                {
+                  "vulnerability_scan_policy": "daily"
+                }
+        argumentDocs:
+            id: (String) The ID of this resource.
+            vulnerability_scan_policy: (String) The frequency of the vulnerability scanning is done. Can be to "hourly", "daily" or "weekly"
         importStatements: []
+    harbor_user:
+        subCategory: ""
+        name: harbor_user
+        title: harbor_user Resource - terraform-provider-harbor
+        examples:
+            - name: main
+              manifest: |-
+                {
+                  "email": "john@smith.com",
+                  "full_name": "John Smith",
+                  "password": "Password12345!",
+                  "username": "john"
+                }
+        argumentDocs:
+            admin: '(Boolean) If the user will have admin rights within Harbor (Default: false)'
+            comment: (String) Any comments for that are need for the internal user.
+            email: (String) The email address of the internal user.
+            full_name: (String) The Full Name of the internal user.
+            id: (String) The ID of this resource.
+            password: (String, Sensitive) The password for the internal user.
+            username: (String) The username of the internal user.
+        importStatements:
+            - terraform import harbor_user.main /users/19

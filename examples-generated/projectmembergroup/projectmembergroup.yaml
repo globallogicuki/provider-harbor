@@ -1,0 +1,28 @@
+apiVersion: projectmembergroup.crossplane.io/v1alpha1
+kind: ProjectMemberGroup
+metadata:
+  annotations:
+    meta.upbound.io/example-id: projectmembergroup/v1alpha1/projectmembergroup
+  labels:
+    testing.upbound.io/example-name: main
+  name: main
+spec:
+  forProvider:
+    groupName: testing1
+    projectId: ${harbor_project.main.id}
+    role: projectadmin
+    type: oidc
+
+---
+
+apiVersion: project.crossplane.io/v1alpha1
+kind: Project
+metadata:
+  annotations:
+    meta.upbound.io/example-id: projectmembergroup/v1alpha1/projectmembergroup
+  labels:
+    testing.upbound.io/example-name: main
+  name: main
+spec:
+  forProvider:
+    name: main
