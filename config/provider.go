@@ -5,6 +5,7 @@ Copyright 2021 Upbound Inc.
 package config
 
 import (
+	// (lornest) embedding schema and metadata files
 	_ "embed"
 
 	ujconfig "github.com/crossplane/upjet/pkg/config"

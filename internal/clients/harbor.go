@@ -38,14 +38,12 @@ type harborConfig struct {
 	URL         *string `json:"url,omitempty"`
 	Username    *string `json:"username,omitempty"`
 	Password    *string `json:"password,omitempty"`
-	ApiVersion  *int    `json:"api_version,omitempty"`
+	APIVersion  *int    `json:"api_version,omitempty"`
 	BearerToken *string `json:"bearer_token,omitempty"`
 	Insecure    *bool   `json:"insecure,omitempty"`
 }
 
-func terraformProviderConfigurationBuilder(
-	creds harborConfig,
-) (terraform.ProviderConfiguration, error) {
+func terraformProviderConfigurationBuilder(creds harborConfig) terraform.ProviderConfiguration {
 	cnf := terraform.ProviderConfiguration{}
 
 	if creds.URL != nil {
@@ -60,15 +58,19 @@ func terraformProviderConfigurationBuilder(
 		cnf[password] = *creds.Password
 	}
 
-	if creds.ApiVersion != nil {
-		cnf[apiVersion] = *creds.ApiVersion
+	if creds.APIVersion != nil {
+		cnf[apiVersion] = *creds.APIVersion
 	}
 
 	if creds.BearerToken != nil {
 		cnf[bearerToken] = *creds.BearerToken
 	}
 
-	return cnf, nil
+	if creds.Insecure != nil {
+		cnf[insecure] = *creds.Insecure
+	}
+
+	return cnf
 }
 
 // TerraformSetupBuilder builds Terraform a terraform.SetupFn function which
@@ -106,21 +108,13 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 		if err != nil {
 			return ps, errors.Wrap(err, errExtractCredentials)
 		}
-		creds := map[string]string{}
+		creds := harborConfig{}
 		if err := json.Unmarshal(data, &creds); err != nil {
 			return ps, errors.Wrap(err, errUnmarshalCredentials)
 		}
 
-		ps.Configuration = map[string]any{}
-		if v, ok := creds[url]; ok {
-			ps.Configuration[url] = v
-		}
-		if v, ok := creds[username]; ok {
-			ps.Configuration[username] = v
-		}
-		if v, ok := creds[password]; ok {
-			ps.Configuration[password] = v
-		}
+		ps.Configuration = terraformProviderConfigurationBuilder(creds)
+
 		return ps, nil
 	}
 }
