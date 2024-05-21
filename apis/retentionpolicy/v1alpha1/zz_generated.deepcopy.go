@@ -9,6 +9,7 @@ Copyright 2022 Upbound Inc.
 package v1alpha1
 
 import (
+	"github.com/crossplane/crossplane-runtime/apis/common/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 )
 
@@ -51,11 +52,6 @@ func (in *RetentionPolicyInitParameters) DeepCopyInto(out *RetentionPolicyInitPa
 	}
 	if in.Schedule != nil {
 		in, out := &in.Schedule, &out.Schedule
-		*out = new(string)
-		**out = **in
-	}
-	if in.Scope != nil {
-		in, out := &in.Scope, &out.Scope
 		*out = new(string)
 		**out = **in
 	}
@@ -159,6 +155,16 @@ func (in *RetentionPolicyParameters) DeepCopyInto(out *RetentionPolicyParameters
 		in, out := &in.Scope, &out.Scope
 		*out = new(string)
 		**out = **in
+	}
+	if in.ScopeRef != nil {
+		in, out := &in.ScopeRef, &out.ScopeRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.ScopeSelector != nil {
+		in, out := &in.ScopeSelector, &out.ScopeSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 }
 

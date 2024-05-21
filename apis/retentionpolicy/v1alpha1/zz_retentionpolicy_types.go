@@ -24,9 +24,6 @@ type RetentionPolicyInitParameters struct {
 
 	// (String) The schedule of when you would like the policy to run. This can be Hourly, Daily, Weekly or can be a custom cron string.
 	Schedule *string `json:"schedule,omitempty" tf:"schedule,omitempty"`
-
-	// (String) The project id of which you would like to apply this policy.
-	Scope *string `json:"scope,omitempty" tf:"scope,omitempty"`
 }
 
 type RetentionPolicyObservation struct {
@@ -55,8 +52,17 @@ type RetentionPolicyParameters struct {
 	Schedule *string `json:"schedule,omitempty" tf:"schedule,omitempty"`
 
 	// (String) The project id of which you would like to apply this policy.
+	// +crossplane:generate:reference:type=github.com/globallogicuki/provider-harbor/apis/project/v1alpha1.Project
 	// +kubebuilder:validation:Optional
 	Scope *string `json:"scope,omitempty" tf:"scope,omitempty"`
+
+	// Reference to a Project in project to populate scope.
+	// +kubebuilder:validation:Optional
+	ScopeRef *v1.Reference `json:"scopeRef,omitempty" tf:"-"`
+
+	// Selector for a Project in project to populate scope.
+	// +kubebuilder:validation:Optional
+	ScopeSelector *v1.Selector `json:"scopeSelector,omitempty" tf:"-"`
 }
 
 type RuleInitParameters struct {
@@ -214,7 +220,6 @@ type RetentionPolicy struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.rule) || (has(self.initProvider) && has(self.initProvider.rule))",message="spec.forProvider.rule is a required parameter"
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.scope) || (has(self.initProvider) && has(self.initProvider.scope))",message="spec.forProvider.scope is a required parameter"
 	Spec   RetentionPolicySpec   `json:"spec"`
 	Status RetentionPolicyStatus `json:"status,omitempty"`
 }

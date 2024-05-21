@@ -16,7 +16,9 @@ spec:
       repoMatching: '**'
       tagMatching: '{latest,snapshot}'
     schedule: Daily
-    scope: ${harbor_project.main.id}
+    scopeSelector:
+      matchLabels:
+        testing.upbound.io/example-name: main
 
 ---
 
