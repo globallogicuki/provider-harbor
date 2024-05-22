@@ -2,3 +2,18 @@ apiVersion: meta.pkg.crossplane.io/v1
 kind: Provider
 metadata:
   name: provider-harbor
+  annotations:
+    meta.crossplane.io/maintainer: GlobalLogic UK&I
+    meta.crossplane.io/source: github.com/globallogicuki/provider-harbor
+    meta.crossplane.io/license: Apache-2.0
+    meta.crossplane.io/description: |
+      The Harbor Crossplane provider adds support for 
+      managing Harbor resources in kubernetes.
+
+    meta.crossplane.io/readme: |
+      `provider-harbor` is a crossplane infrastructure provider for 
+      [Harbor](https://goharbor.io/). 
+
+      It is based on the Terraform Harbor provider. Read the 
+      [readme](https://github.com/globallogicuki/provider-harbor/blob/main/README.md)
+      for instructions.
