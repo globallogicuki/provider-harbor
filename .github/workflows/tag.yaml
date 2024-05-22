@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The Crossplane Authors <https://crossplane.io>
+#
+# SPDX-License-Identifier: CC0-1.0
+
 name: Tag
 
 on:
@@ -12,7 +16,7 @@ on:
 
 jobs:
   tag:
-    uses: upbound/uptest/.github/workflows/provider-tag.yml@main
+    uses: upbound/official-providers-ci/.github/workflows/provider-tag.yml@standard-runners
     with:
       version: ${{ github.event.inputs.version }}
       message: ${{ github.event.inputs.message }}
