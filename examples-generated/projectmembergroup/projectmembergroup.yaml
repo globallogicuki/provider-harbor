@@ -9,7 +9,9 @@ metadata:
 spec:
   forProvider:
     groupName: testing1
-    projectId: ${harbor_project.main.id}
+    projectIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: main
     role: projectadmin
     type: oidc
 
