@@ -14,7 +14,8 @@ package apis
 import (
 	"k8s.io/apimachinery/pkg/runtime"
 
-	v1alpha1 "github.com/globallogicuki/provider-harbor/apis/project/v1alpha1"
+	v1alpha1 "github.com/globallogicuki/provider-harbor/apis/group/v1alpha1"
+	v1alpha1project "github.com/globallogicuki/provider-harbor/apis/project/v1alpha1"
 	v1alpha1projectmembergroup "github.com/globallogicuki/provider-harbor/apis/projectmembergroup/v1alpha1"
 	v1alpha1retentionpolicy "github.com/globallogicuki/provider-harbor/apis/retentionpolicy/v1alpha1"
 	v1alpha1robotaccount "github.com/globallogicuki/provider-harbor/apis/robotaccount/v1alpha1"
@@ -26,6 +27,7 @@ func init() {
 	// Register the types with the Scheme so the components can map objects to GroupVersionKinds and back
 	AddToSchemes = append(AddToSchemes,
 		v1alpha1.SchemeBuilder.AddToScheme,
+		v1alpha1project.SchemeBuilder.AddToScheme,
 		v1alpha1projectmembergroup.SchemeBuilder.AddToScheme,
 		v1alpha1retentionpolicy.SchemeBuilder.AddToScheme,
 		v1alpha1robotaccount.SchemeBuilder.AddToScheme,

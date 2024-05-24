@@ -1,0 +1,13 @@
+apiVersion: group.crossplane.io/v1alpha1
+kind: Group
+metadata:
+  annotations:
+    meta.upbound.io/example-id: group/v1alpha1/group
+  labels:
+    testing.upbound.io/example-name: storage-group
+  name: storage-group
+spec:
+  forProvider:
+    groupName: storage-group
+    groupType: 3
+    ldapGroupDn: storage-group

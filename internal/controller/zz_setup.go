@@ -9,6 +9,7 @@ import (
 
 	"github.com/crossplane/upjet/pkg/controller"
 
+	group "github.com/globallogicuki/provider-harbor/internal/controller/group/group"
 	project "github.com/globallogicuki/provider-harbor/internal/controller/project/project"
 	projectmembergroup "github.com/globallogicuki/provider-harbor/internal/controller/projectmembergroup/projectmembergroup"
 	providerconfig "github.com/globallogicuki/provider-harbor/internal/controller/providerconfig"
@@ -20,6 +21,7 @@ import (
 // the supplied manager.
 func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
+		group.Setup,
 		project.Setup,
 		projectmembergroup.Setup,
 		providerconfig.Setup,

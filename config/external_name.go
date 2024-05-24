@@ -14,6 +14,7 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"harbor_robot_account":        config.IdentifierFromProvider,
 	"harbor_retention_policy":     config.IdentifierFromProvider,
 	"harbor_project_member_group": config.IdentifierFromProvider,
+	"harbor_group":                config.IdentifierFromProvider,
 }
 
 // ExternalNameConfigurations applies all external name configs listed in the

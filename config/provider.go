@@ -5,11 +5,11 @@ Copyright 2021 Upbound Inc.
 package config
 
 import (
-	// (lornest) embedding schema and metadata files
 	_ "embed"
 
 	ujconfig "github.com/crossplane/upjet/pkg/config"
 
+	"github.com/globallogicuki/provider-harbor/config/group"
 	"github.com/globallogicuki/provider-harbor/config/project"
 	"github.com/globallogicuki/provider-harbor/config/projectmembergroup"
 	"github.com/globallogicuki/provider-harbor/config/retentionpolicy"
@@ -48,6 +48,7 @@ func GetProvider() *ujconfig.Provider {
 		retentionpolicy.Configure,
 		robotaccount.Configure,
 		projectmembergroup.Configure,
+		group.Configure,
 	} {
 		configure(pc)
 	}
