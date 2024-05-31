@@ -17,8 +17,6 @@ import (
 	v1alpha1 "github.com/globallogicuki/provider-harbor/apis/group/v1alpha1"
 	v1alpha1label "github.com/globallogicuki/provider-harbor/apis/label/v1alpha1"
 	v1alpha1project "github.com/globallogicuki/provider-harbor/apis/project/v1alpha1"
-	v1alpha1projectmembergroup "github.com/globallogicuki/provider-harbor/apis/projectmembergroup/v1alpha1"
-	v1alpha1retentionpolicy "github.com/globallogicuki/provider-harbor/apis/retentionpolicy/v1alpha1"
 	v1alpha1robotaccount "github.com/globallogicuki/provider-harbor/apis/robotaccount/v1alpha1"
 	v1alpha1apis "github.com/globallogicuki/provider-harbor/apis/v1alpha1"
 	v1beta1 "github.com/globallogicuki/provider-harbor/apis/v1beta1"
@@ -30,8 +28,6 @@ func init() {
 		v1alpha1.SchemeBuilder.AddToScheme,
 		v1alpha1label.SchemeBuilder.AddToScheme,
 		v1alpha1project.SchemeBuilder.AddToScheme,
-		v1alpha1projectmembergroup.SchemeBuilder.AddToScheme,
-		v1alpha1retentionpolicy.SchemeBuilder.AddToScheme,
 		v1alpha1robotaccount.SchemeBuilder.AddToScheme,
 		v1alpha1apis.SchemeBuilder.AddToScheme,
 		v1beta1.SchemeBuilder.AddToScheme,

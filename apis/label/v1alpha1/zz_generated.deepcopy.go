@@ -9,6 +9,7 @@ Copyright 2022 Upbound Inc.
 package v1alpha1
 
 import (
+	"github.com/crossplane/crossplane-runtime/apis/common/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 )
 
@@ -54,11 +55,6 @@ func (in *LabelInitParameters) DeepCopyInto(out *LabelInitParameters) {
 	}
 	if in.Name != nil {
 		in, out := &in.Name, &out.Name
-		*out = new(string)
-		**out = **in
-	}
-	if in.ProjectID != nil {
-		in, out := &in.ProjectID, &out.ProjectID
 		*out = new(string)
 		**out = **in
 	}
@@ -173,6 +169,16 @@ func (in *LabelParameters) DeepCopyInto(out *LabelParameters) {
 		in, out := &in.ProjectID, &out.ProjectID
 		*out = new(string)
 		**out = **in
+	}
+	if in.ProjectIDRef != nil {
+		in, out := &in.ProjectIDRef, &out.ProjectIDRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.ProjectIDSelector != nil {
+		in, out := &in.ProjectIDSelector, &out.ProjectIDSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 }
 

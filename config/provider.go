@@ -5,7 +5,6 @@ Copyright 2021 Upbound Inc.
 package config
 
 import (
-	// (lornest) comment for lint, embed is used to embed the schema and provider-metadata
 	_ "embed"
 
 	ujconfig "github.com/crossplane/upjet/pkg/config"
@@ -13,7 +12,7 @@ import (
 	"github.com/globallogicuki/provider-harbor/config/group"
 	"github.com/globallogicuki/provider-harbor/config/label"
 	"github.com/globallogicuki/provider-harbor/config/project"
-	"github.com/globallogicuki/provider-harbor/config/projectmembergroup"
+	membergroup "github.com/globallogicuki/provider-harbor/config/projectmembergroup"
 	"github.com/globallogicuki/provider-harbor/config/retentionpolicy"
 	"github.com/globallogicuki/provider-harbor/config/robotaccount"
 )
@@ -49,7 +48,7 @@ func GetProvider() *ujconfig.Provider {
 		project.Configure,
 		retentionpolicy.Configure,
 		robotaccount.Configure,
-		projectmembergroup.Configure,
+		membergroup.Configure,
 		group.Configure,
 		label.Configure,
 	} {

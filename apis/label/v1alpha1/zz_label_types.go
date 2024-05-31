@@ -27,9 +27,6 @@ type LabelInitParameters struct {
 
 	// (String) The of name of the label within harbor.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
-
-	// (String) The id of the project with harbor.
-	ProjectID *string `json:"projectId,omitempty" tf:"project_id,omitempty"`
 }
 
 type LabelObservation struct {
@@ -68,8 +65,17 @@ type LabelParameters struct {
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (String) The id of the project with harbor.
+	// +crossplane:generate:reference:type=github.com/globallogicuki/provider-harbor/apis/project/v1alpha1.Project
 	// +kubebuilder:validation:Optional
 	ProjectID *string `json:"projectId,omitempty" tf:"project_id,omitempty"`
+
+	// Reference to a Project in project to populate projectId.
+	// +kubebuilder:validation:Optional
+	ProjectIDRef *v1.Reference `json:"projectIdRef,omitempty" tf:"-"`
+
+	// Selector for a Project in project to populate projectId.
+	// +kubebuilder:validation:Optional
+	ProjectIDSelector *v1.Selector `json:"projectIdSelector,omitempty" tf:"-"`
 }
 
 // LabelSpec defines the desired state of Label

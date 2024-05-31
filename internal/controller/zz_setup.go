@@ -11,10 +11,10 @@ import (
 
 	group "github.com/globallogicuki/provider-harbor/internal/controller/group/group"
 	label "github.com/globallogicuki/provider-harbor/internal/controller/label/label"
+	membergroup "github.com/globallogicuki/provider-harbor/internal/controller/project/membergroup"
 	project "github.com/globallogicuki/provider-harbor/internal/controller/project/project"
-	projectmembergroup "github.com/globallogicuki/provider-harbor/internal/controller/projectmembergroup/projectmembergroup"
+	retentionpolicy "github.com/globallogicuki/provider-harbor/internal/controller/project/retentionpolicy"
 	providerconfig "github.com/globallogicuki/provider-harbor/internal/controller/providerconfig"
-	retentionpolicy "github.com/globallogicuki/provider-harbor/internal/controller/retentionpolicy/retentionpolicy"
 	robotaccount "github.com/globallogicuki/provider-harbor/internal/controller/robotaccount/robotaccount"
 )
 
@@ -24,10 +24,10 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
 		group.Setup,
 		label.Setup,
+		membergroup.Setup,
 		project.Setup,
-		projectmembergroup.Setup,
-		providerconfig.Setup,
 		retentionpolicy.Setup,
+		providerconfig.Setup,
 		robotaccount.Setup,
 	} {
 		if err := setup(mgr, o); err != nil {
