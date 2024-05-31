@@ -1,0 +1,13 @@
+apiVersion: project.harbor.crossplane.io/v1alpha1
+kind: Project
+metadata:
+  annotations:
+    meta.upbound.io/example-id: robotaccount/v1alpha1/robotaccount
+  labels:
+    testing.upbound.io/example-name: projectbot
+  name: projectbot
+spec:
+  managementPolicies: ['*']
+  forProvider:
+    name: projectbotagain
+    public: true

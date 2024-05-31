@@ -1,4 +1,4 @@
-apiVersion: group.crossplane.io/v1alpha1
+apiVersion: group.harbor.crossplane.io/v1alpha1
 kind: Group
 metadata:
   annotations:

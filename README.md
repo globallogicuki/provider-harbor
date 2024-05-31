@@ -1,9 +1,8 @@
 # Provider Harbor
 
 `provider-harbor` is a [Crossplane](https://crossplane.io/) provider that
-is built using [Upjet](https://github.com/crossplane/upjet) code
-generation tools and exposes XRM-conformant managed resources for the
-Harbor API.
+is built using [Upjet](https://github.com/crossplane/upjet) and exposes XRM-conformant managed resources 
+for the [Harbor](https://goharbor.io/) API.
 
 ## Getting Started
 
@@ -28,6 +27,10 @@ EOF
 Notice that in this example Provider resource is referencing ControllerConfig with debug enabled.
 
 You can see the API reference [here](https://doc.crds.dev/github.com/globallogicuki/provider-harbor).
+
+## Provider Config
+Note, that the ProviderConfig uses basic auth and requires a local user. A robot user can be used, 
+but has restrictions around what can be created (e.g. a Robot cannot create other Robots).
 
 ## Developing
 

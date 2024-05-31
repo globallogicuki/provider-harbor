@@ -4,9 +4,9 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.13.0
-  name: projectmembergroups.projectmembergroup.crossplane.io
+  name: projectmembergroups.projectmembergroup.harbor.crossplane.io
 spec:
-  group: projectmembergroup.crossplane.io
+  group: projectmembergroup.harbor.crossplane.io
   names:
     categories:
     - crossplane

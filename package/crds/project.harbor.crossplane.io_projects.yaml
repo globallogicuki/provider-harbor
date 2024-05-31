@@ -4,18 +4,18 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.13.0
-  name: robotaccounts.robotaccount.crossplane.io
+  name: projects.project.harbor.crossplane.io
 spec:
-  group: robotaccount.crossplane.io
+  group: project.harbor.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - harbor
-    kind: RobotAccount
-    listKind: RobotAccountList
-    plural: robotaccounts
-    singular: robotaccount
+    kind: Project
+    listKind: ProjectList
+    plural: projects
+    singular: project
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -34,7 +34,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: RobotAccount is the Schema for the RobotAccounts API.
+        description: Project is the Schema for the Projects API.
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -49,7 +49,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: RobotAccountSpec defines the desired state of RobotAccount
+            description: ProjectSpec defines the desired state of Project
             properties:
               deletionPolicy:
                 default: Delete
@@ -66,78 +66,46 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  description:
-                    description: (String) The description of the robot account will
-                      be displayed in harbor.
+                  cveAllowlist:
+                    description: 123", "CVE-145"] or ["CVE-123"]
+                    items:
+                      type: string
+                    type: array
+                  deploymentSecurity:
+                    description: empty)
                     type: string
-                  disable:
-                    description: (Boolean) Disables the robot account when set to
-                      true.
+                  enableContentTrust:
+                    description: '(Boolean) Enables Content Trust for project. When
+                      enabled it queries the embedded docker notary server. (Default:
+                      false).'
                     type: boolean
-                  duration:
-                    description: (Number) By default, the robot account will not expire.
-                      Set it to the amount of days until the account should expire.
-                    type: number
-                  level:
-                    description: (String) Level of the robot account, currently either
-                      system or project.
-                    type: string
+                  enableContentTrustCosign:
+                    description: '(Boolean) Enables Content Trust Cosign for project.
+                      When enabled it queries Cosign. (Default: false)'
+                    type: boolean
+                  forceDestroy:
+                    description: (Boolean) A boolean that indicates all repositories
+                      should be deleted from the project so that the project can be
+                      destroyed without error. These repositories are not recoverable.
+                    type: boolean
                   name:
                     description: (String) The name of the project that will be created
                       in harbor.
                     type: string
-                  permissions:
-                    description: '(Block Set, Min: 1) (see below for nested schema)'
-                    items:
-                      properties:
-                        access:
-                          description: '(Block Set, Min: 1) (see below for nested
-                            schema)'
-                          items:
-                            properties:
-                              action:
-                                description: (String) Eg. push, pull, read, etc. Check
-                                  available actions.
-                                type: string
-                              effect:
-                                description: (String) Either allow or deny. Defaults
-                                  to allow.
-                                type: string
-                              resource:
-                                description: (String) Eg. repository, labels, etc.
-                                  Check available resources.
-                                type: string
-                            type: object
-                          type: array
-                        kind:
-                          description: (String) Either system or project.
-                          type: string
-                        namespace:
-                          description: (String) namespace is the name of your project.
-                            For kind system permissions, always use / as namespace.
-                            Use * to match all projects.
-                          type: string
-                      type: object
-                    type: array
-                  secretSecretRef:
-                    description: (String, Sensitive) The secret of the robot account
-                      used for authentication. Defaults to random generated string
-                      from Harbor.
-                    properties:
-                      key:
-                        description: The key to select.
-                        type: string
-                      name:
-                        description: Name of the secret.
-                        type: string
-                      namespace:
-                        description: Namespace of the secret.
-                        type: string
-                    required:
-                    - key
-                    - name
-                    - namespace
-                    type: object
+                  public:
+                    description: '(Boolean) The project will be public accessibility.(Default:
+                      false)'
+                    type: boolean
+                  registryId:
+                    description: (Number) To enable project as Proxy Cache.
+                    type: number
+                  storageQuota:
+                    description: (Number) The storage quota of the project in GB's.
+                    type: number
+                  vulnerabilityScanning:
+                    description: '(Boolean) Images will be scanned for vulnerabilities
+                      when push to harbor. (Default: true)'
+                    type: boolean
                 type: object
               initProvider:
                 description: THIS IS A BETA FIELD. It will be honored unless the Management
@@ -151,59 +119,46 @@ spec:
                   for example because of an external controller is managing them,
                   like an autoscaler.
                 properties:
-                  description:
-                    description: (String) The description of the robot account will
-                      be displayed in harbor.
+                  cveAllowlist:
+                    description: 123", "CVE-145"] or ["CVE-123"]
+                    items:
+                      type: string
+                    type: array
+                  deploymentSecurity:
+                    description: empty)
                     type: string
-                  disable:
-                    description: (Boolean) Disables the robot account when set to
-                      true.
+                  enableContentTrust:
+                    description: '(Boolean) Enables Content Trust for project. When
+                      enabled it queries the embedded docker notary server. (Default:
+                      false).'
                     type: boolean
-                  duration:
-                    description: (Number) By default, the robot account will not expire.
-                      Set it to the amount of days until the account should expire.
-                    type: number
-                  level:
-                    description: (String) Level of the robot account, currently either
-                      system or project.
-                    type: string
+                  enableContentTrustCosign:
+                    description: '(Boolean) Enables Content Trust Cosign for project.
+                      When enabled it queries Cosign. (Default: false)'
+                    type: boolean
+                  forceDestroy:
+                    description: (Boolean) A boolean that indicates all repositories
+                      should be deleted from the project so that the project can be
+                      destroyed without error. These repositories are not recoverable.
+                    type: boolean
                   name:
                     description: (String) The name of the project that will be created
                       in harbor.
                     type: string
-                  permissions:
-                    description: '(Block Set, Min: 1) (see below for nested schema)'
-                    items:
-                      properties:
-                        access:
-                          description: '(Block Set, Min: 1) (see below for nested
-                            schema)'
-                          items:
-                            properties:
-                              action:
-                                description: (String) Eg. push, pull, read, etc. Check
-                                  available actions.
-                                type: string
-                              effect:
-                                description: (String) Either allow or deny. Defaults
-                                  to allow.
-                                type: string
-                              resource:
-                                description: (String) Eg. repository, labels, etc.
-                                  Check available resources.
-                                type: string
-                            type: object
-                          type: array
-                        kind:
-                          description: (String) Either system or project.
-                          type: string
-                        namespace:
-                          description: (String) namespace is the name of your project.
-                            For kind system permissions, always use / as namespace.
-                            Use * to match all projects.
-                          type: string
-                      type: object
-                    type: array
+                  public:
+                    description: '(Boolean) The project will be public accessibility.(Default:
+                      false)'
+                    type: boolean
+                  registryId:
+                    description: (Number) To enable project as Proxy Cache.
+                    type: number
+                  storageQuota:
+                    description: (Number) The storage quota of the project in GB's.
+                    type: number
+                  vulnerabilityScanning:
+                    description: '(Boolean) Images will be scanned for vulnerabilities
+                      when push to harbor. (Default: true)'
+                    type: boolean
                 type: object
               managementPolicies:
                 default:
@@ -366,85 +321,61 @@ spec:
             - forProvider
             type: object
             x-kubernetes-validations:
-            - message: spec.forProvider.level is a required parameter
-              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.level)
-                || (has(self.initProvider) && has(self.initProvider.level))'
             - message: spec.forProvider.name is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
                 || (has(self.initProvider) && has(self.initProvider.name))'
-            - message: spec.forProvider.permissions is a required parameter
-              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.permissions)
-                || (has(self.initProvider) && has(self.initProvider.permissions))'
           status:
-            description: RobotAccountStatus defines the observed state of RobotAccount.
+            description: ProjectStatus defines the observed state of Project.
             properties:
               atProvider:
                 properties:
-                  description:
-                    description: (String) The description of the robot account will
-                      be displayed in harbor.
+                  cveAllowlist:
+                    description: 123", "CVE-145"] or ["CVE-123"]
+                    items:
+                      type: string
+                    type: array
+                  deploymentSecurity:
+                    description: empty)
                     type: string
-                  disable:
-                    description: (Boolean) Disables the robot account when set to
-                      true.
+                  enableContentTrust:
+                    description: '(Boolean) Enables Content Trust for project. When
+                      enabled it queries the embedded docker notary server. (Default:
+                      false).'
                     type: boolean
-                  duration:
-                    description: (Number) By default, the robot account will not expire.
-                      Set it to the amount of days until the account should expire.
-                    type: number
-                  fullName:
-                    description: (String)
-                    type: string
+                  enableContentTrustCosign:
+                    description: '(Boolean) Enables Content Trust Cosign for project.
+                      When enabled it queries Cosign. (Default: false)'
+                    type: boolean
+                  forceDestroy:
+                    description: (Boolean) A boolean that indicates all repositories
+                      should be deleted from the project so that the project can be
+                      destroyed without error. These repositories are not recoverable.
+                    type: boolean
                   id:
                     description: (String) The ID of this resource.
-                    type: string
-                  level:
-                    description: (String) Level of the robot account, currently either
-                      system or project.
                     type: string
                   name:
                     description: (String) The name of the project that will be created
                       in harbor.
                     type: string
-                  permissions:
-                    description: '(Block Set, Min: 1) (see below for nested schema)'
-                    items:
-                      properties:
-                        access:
-                          description: '(Block Set, Min: 1) (see below for nested
-                            schema)'
-                          items:
-                            properties:
-                              action:
-                                description: (String) Eg. push, pull, read, etc. Check
-                                  available actions.
-                                type: string
-                              effect:
-                                description: (String) Either allow or deny. Defaults
-                                  to allow.
-                                type: string
-                              resource:
-                                description: (String) Eg. repository, labels, etc.
-                                  Check available resources.
-                                type: string
-                            type: object
-                          type: array
-                        kind:
-                          description: (String) Either system or project.
-                          type: string
-                        namespace:
-                          description: (String) namespace is the name of your project.
-                            For kind system permissions, always use / as namespace.
-                            Use * to match all projects.
-                          type: string
-                      type: object
-                    type: array
-                  robotId:
-                    description: (String)
-                    type: string
+                  projectId:
+                    description: (Number) The project id of this resource.
+                    type: number
+                  public:
+                    description: '(Boolean) The project will be public accessibility.(Default:
+                      false)'
+                    type: boolean
+                  registryId:
+                    description: (Number) To enable project as Proxy Cache.
+                    type: number
+                  storageQuota:
+                    description: (Number) The storage quota of the project in GB's.
+                    type: number
+                  vulnerabilityScanning:
+                    description: '(Boolean) Images will be scanned for vulnerabilities
+                      when push to harbor. (Default: true)'
+                    type: boolean
                 type: object
               conditions:
                 description: Conditions of the resource.

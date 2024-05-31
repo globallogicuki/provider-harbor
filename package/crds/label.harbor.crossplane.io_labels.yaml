@@ -4,18 +4,18 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.13.0
-  name: groups.group.crossplane.io
+  name: labels.label.harbor.crossplane.io
 spec:
-  group: group.crossplane.io
+  group: label.harbor.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - harbor
-    kind: Group
-    listKind: GroupList
-    plural: groups
-    singular: group
+    kind: Label
+    listKind: LabelList
+    plural: labels
+    singular: label
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -34,7 +34,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Group is the Schema for the Groups API.
+        description: Label is the Schema for the Labels API.
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -49,7 +49,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: GroupSpec defines the desired state of Group
+            description: LabelSpec defines the desired state of Label
             properties:
               deletionPolicy:
                 default: Delete
@@ -66,15 +66,18 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  groupName:
-                    description: (String) The name of the group.
+                  color:
+                    description: '(String) The color of the label within harbor (Default:
+                      #FFFFF)'
                     type: string
-                  groupType:
-                    description: '(Number) 3. Note: group type 3 is OIDC group.'
-                    type: number
-                  ldapGroupDn:
-                    description: (String) The distinguished name of the group within
-                      AD/LDAP.
+                  description:
+                    description: (String) The Description of the label within harbor
+                    type: string
+                  name:
+                    description: (String) The of name of the label within harbor.
+                    type: string
+                  projectId:
+                    description: (String) The id of the project with harbor.
                     type: string
                 type: object
               initProvider:
@@ -89,15 +92,18 @@ spec:
                   for example because of an external controller is managing them,
                   like an autoscaler.
                 properties:
-                  groupName:
-                    description: (String) The name of the group.
+                  color:
+                    description: '(String) The color of the label within harbor (Default:
+                      #FFFFF)'
                     type: string
-                  groupType:
-                    description: '(Number) 3. Note: group type 3 is OIDC group.'
-                    type: number
-                  ldapGroupDn:
-                    description: (String) The distinguished name of the group within
-                      AD/LDAP.
+                  description:
+                    description: (String) The Description of the label within harbor
+                    type: string
+                  name:
+                    description: (String) The of name of the label within harbor.
+                    type: string
+                  projectId:
+                    description: (String) The id of the project with harbor.
                     type: string
                 type: object
               managementPolicies:
@@ -261,31 +267,33 @@ spec:
             - forProvider
             type: object
             x-kubernetes-validations:
-            - message: spec.forProvider.groupName is a required parameter
+            - message: spec.forProvider.name is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.groupName)
-                || (has(self.initProvider) && has(self.initProvider.groupName))'
-            - message: spec.forProvider.groupType is a required parameter
-              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.groupType)
-                || (has(self.initProvider) && has(self.initProvider.groupType))'
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
+                || (has(self.initProvider) && has(self.initProvider.name))'
           status:
-            description: GroupStatus defines the observed state of Group.
+            description: LabelStatus defines the observed state of Label.
             properties:
               atProvider:
                 properties:
-                  groupName:
-                    description: (String) The name of the group.
+                  color:
+                    description: '(String) The color of the label within harbor (Default:
+                      #FFFFF)'
                     type: string
-                  groupType:
-                    description: '(Number) 3. Note: group type 3 is OIDC group.'
-                    type: number
+                  description:
+                    description: (String) The Description of the label within harbor
+                    type: string
                   id:
                     description: (String) The ID of this resource.
                     type: string
-                  ldapGroupDn:
-                    description: (String) The distinguished name of the group within
-                      AD/LDAP.
+                  name:
+                    description: (String) The of name of the label within harbor.
+                    type: string
+                  projectId:
+                    description: (String) The id of the project with harbor.
+                    type: string
+                  scope:
+                    description: (String)
                     type: string
                 type: object
               conditions:

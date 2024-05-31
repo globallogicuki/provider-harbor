@@ -1,4 +1,4 @@
-apiVersion: robotaccount.crossplane.io/v1alpha1
+apiVersion: robotaccount.harbor.crossplane.io/v1alpha1
 kind: RobotAccount
 metadata:
   annotations:
@@ -34,7 +34,7 @@ spec:
 
 ---
 
-apiVersion: project.crossplane.io/v1alpha1
+apiVersion: project.harbor.crossplane.io/v1alpha1
 kind: Project
 metadata:
   annotations:

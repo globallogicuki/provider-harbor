@@ -1,8 +1,8 @@
-apiVersion: projectmembergroup.harbor.crossplane.io/v1alpha1
-kind: ProjectMemberGroup
+apiVersion: project.harbor.crossplane.io/v1alpha1
+kind: MemberGroup
 metadata:
   annotations:
-    meta.upbound.io/example-id: projectmembergroup/v1alpha1/projectmembergroup
+    meta.upbound.io/example-id: project/v1alpha1/membergroup
   labels:
     testing.upbound.io/example-name: main
   name: main
@@ -21,7 +21,7 @@ apiVersion: project.harbor.crossplane.io/v1alpha1
 kind: Project
 metadata:
   annotations:
-    meta.upbound.io/example-id: projectmembergroup/v1alpha1/projectmembergroup
+    meta.upbound.io/example-id: project/v1alpha1/membergroup
   labels:
     testing.upbound.io/example-name: main
   name: main
