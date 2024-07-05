@@ -16,23 +16,17 @@ spec:
       - action: create
         resource: label
       kind: system
-      namespaceSelector:
-        matchLabels:
-          testing.upbound.io/example-name: example
+      namespace: /
     - access:
       - action: push
         resource: repository
       kind: project
-      namespaceSelector:
-        matchLabels:
-          testing.upbound.io/example-name: main
+      namespace: main
     - access:
       - action: pull
         resource: repository
       kind: project
-      namespaceSelector:
-        matchLabels:
-          testing.upbound.io/example-name: example
+      namespace: '*'
     secretSecretRef:
       key: attribute.password.result
       name: example-

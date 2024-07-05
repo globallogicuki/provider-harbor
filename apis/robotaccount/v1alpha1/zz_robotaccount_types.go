@@ -63,6 +63,9 @@ type PermissionsInitParameters struct {
 
 	// (String) Either system or project.
 	Kind *string `json:"kind,omitempty" tf:"kind,omitempty"`
+
+	// (String) namespace is the name of your project. For kind system permissions, always use / as namespace. Use * to match all projects.
+	Namespace *string `json:"namespace,omitempty" tf:"namespace,omitempty"`
 }
 
 type PermissionsObservation struct {
@@ -88,17 +91,8 @@ type PermissionsParameters struct {
 	Kind *string `json:"kind" tf:"kind,omitempty"`
 
 	// (String) namespace is the name of your project. For kind system permissions, always use / as namespace. Use * to match all projects.
-	// +crossplane:generate:reference:type=github.com/globallogicuki/provider-harbor/apis/project/v1alpha1.Project
 	// +kubebuilder:validation:Optional
-	Namespace *string `json:"namespace,omitempty" tf:"namespace,omitempty"`
-
-	// Reference to a Project in project to populate namespace.
-	// +kubebuilder:validation:Optional
-	NamespaceRef *v1.Reference `json:"namespaceRef,omitempty" tf:"-"`
-
-	// Selector for a Project in project to populate namespace.
-	// +kubebuilder:validation:Optional
-	NamespaceSelector *v1.Selector `json:"namespaceSelector,omitempty" tf:"-"`
+	Namespace *string `json:"namespace" tf:"namespace,omitempty"`
 }
 
 type RobotAccountInitParameters struct {
