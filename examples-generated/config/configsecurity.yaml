@@ -1,0 +1,14 @@
+apiVersion: config.harbor.crossplane.io/v1alpha1
+kind: ConfigSecurity
+metadata:
+  annotations:
+    meta.upbound.io/example-id: config/v1alpha1/configsecurity
+  labels:
+    testing.upbound.io/example-name: main
+  name: main
+spec:
+  forProvider:
+    cveAllowlist:
+    - CVE-456
+    - CVE-123
+    expiresAt: "1701167767"

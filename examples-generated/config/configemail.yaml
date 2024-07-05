@@ -1,0 +1,12 @@
+apiVersion: config.harbor.crossplane.io/v1alpha1
+kind: ConfigEmail
+metadata:
+  annotations:
+    meta.upbound.io/example-id: config/v1alpha1/configemail
+  labels:
+    testing.upbound.io/example-name: main
+  name: main
+spec:
+  forProvider:
+    emailFrom: dont_reply@acme.com
+    emailHost: server.acme.com
