@@ -1,0 +1,24 @@
+apiVersion: config.harbor.crossplane.io/v1alpha1
+kind: ConfigAuth
+metadata:
+  annotations:
+    meta.upbound.io/example-id: config/v1alpha1/configauth
+  labels:
+    testing.upbound.io/example-name: oidc
+  name: oidc
+spec:
+  forProvider:
+    authMode: oidc_auth
+    oidcAdminGroup: administrators
+    oidcAutoOnboard: true
+    oidcClientId: OIDC Client ID goes here
+    oidcClientSecretSecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
+    oidcEndpoint: https://login.microsoftonline.com/{GUID goes here}/v2.0
+    oidcName: azure
+    oidcScope: openid,email
+    oidcUserClaim: name
+    oidcVerifyCert: true
+    primaryAuthMode: true
