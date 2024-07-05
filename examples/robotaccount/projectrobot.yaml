@@ -4,7 +4,7 @@ metadata:
   annotations:
     meta.upbound.io/example-id: robotaccount/v1alpha1/robotaccount
   labels:
-    testing.upbound.io/example-name: projectbot 
+    testing.upbound.io/example-name: projectbot
   name: projectbot
 spec:
   forProvider:
@@ -12,20 +12,19 @@ spec:
     level: project
     name: example-project-robot
     permissions:
-    - access:
-      - action: push
-        resource: repository
-      - action: pull
-        resource: repository
-      kind: project
-      namespace: projectbot 
+      - access:
+          - action: push
+            resource: repository
+          - action: pull
+            resource: repository
+        kind: project
+        namespace: projectbot
     secretSecretRef:
       key: attribute.password.result
       name: example-
       namespace: upbound-system
 
 ---
-
 apiVersion: project.harbor.crossplane.io/v1alpha1
 kind: Project
 metadata:

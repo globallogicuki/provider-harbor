@@ -12,28 +12,27 @@ spec:
     level: system
     name: example-system-robot
     permissions:
-    - access:
-      - action: create
-        resource: label
-      kind: system
-      namespace: /
-    - access:
-      - action: push
-        resource: repository
-      kind: project
-      namespace: 'main' 
-    - access:
-      - action: pull
-        resource: repository
-      kind: project
-      namespace: '*'
+      - access:
+          - action: create
+            resource: label
+        kind: system
+        namespace: /
+      - access:
+          - action: push
+            resource: repository
+        kind: project
+        namespace: "main"
+      - access:
+          - action: pull
+            resource: repository
+        kind: project
+        namespace: "*"
     secretSecretRef:
       key: attribute.password.result
       name: example-
       namespace: upbound-system
 
 ---
-
 apiVersion: project.harbor.crossplane.io/v1alpha1
 kind: Project
 metadata:

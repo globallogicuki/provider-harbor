@@ -1,0 +1,13 @@
+apiVersion: label.harbor.crossplane.io/v1alpha1
+kind: Label
+metadata:
+  annotations:
+    meta.upbound.io/example-id: label/v1alpha1/label
+  labels:
+    testing.upbound.io/example-name: main
+  name: main
+spec:
+  forProvider:
+    color: "#FF0000"
+    description: Description to for acceptance test
+    name: accTest
