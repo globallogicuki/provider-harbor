@@ -8,6 +8,7 @@ package v1alpha1
 import (
 	"context"
 	reference "github.com/crossplane/crossplane-runtime/pkg/reference"
+	common "github.com/globallogicuki/provider-harbor/config/common"
 	errors "github.com/pkg/errors"
 	client "sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -21,7 +22,7 @@ func (mg *Replication) ResolveReferences(ctx context.Context, c client.Reader) e
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromFloatPtrValue(mg.Spec.ForProvider.RegistryID),
-		Extract:      reference.ExternalName(),
+		Extract:      common.ExtractRegistryId(),
 		Reference:    mg.Spec.ForProvider.RegistryIDRef,
 		Selector:     mg.Spec.ForProvider.RegistryIDSelector,
 		To: reference.To{
