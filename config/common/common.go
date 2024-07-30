@@ -29,29 +29,29 @@ const (
 	// SelfPackagePath is the golang path for this package.
 	SelfPackagePath = "github.com/globallogicuki/provider-harbor/config/common"
 
-	// AccessorExtractor is the golang path to ExtractAccessor function
+	// RegistryIdExtractor is the golang path to ExtractAccessor function
 	// in this package.
-	RegistryIdExtractor = SelfPackagePath + ".ExtractRegistryId()" 
+	RegistryIdExtractor = SelfPackagePath + ".ExtractRegistryId()"
 )
 
 // ExtractRegistryId extracts the registryId parameter from a registry object
 func ExtractRegistryId() reference.ExtractValueFn {
-    return func(mg resource.Managed) string {
-        paved, err := fieldpath.PaveObject(mg)
-        if err != nil {
-            return ""
-        }
-        r, err := paved.GetValue("status.atProvider.registryId")
-        if err != nil {
-            return ""
-        }
+	return func(mg resource.Managed) string {
+		paved, err := fieldpath.PaveObject(mg)
+		if err != nil {
+			return ""
+		}
+		r, err := paved.GetValue("status.atProvider.registryId")
+		if err != nil {
+			return ""
+		}
 		// Convert the interface{} to a string based on its actual type, we expect a float64!
-        switch v := r.(type) {
-        case float64:
-            return strconv.FormatFloat(v, 'f', -1, 64)
-        default:
-            fmt.Printf("unsupported type: %T\n", v)
-            return ""
-        }
-    }
+		switch v := r.(type) {
+		case float64:
+			return strconv.FormatFloat(v, 'f', -1, 64)
+		default:
+			fmt.Printf("unsupported type: %T\n", v)
+			return ""
+		}
+	}
 }
