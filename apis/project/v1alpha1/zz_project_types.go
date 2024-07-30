@@ -40,9 +40,6 @@ type ProjectInitParameters struct {
 	// (Boolean) The project will be public accessibility.(Default: false)
 	Public *bool `json:"public,omitempty" tf:"public,omitempty"`
 
-	// (Number) To enable project as Proxy Cache.
-	RegistryID *float64 `json:"registryId,omitempty" tf:"registry_id,omitempty"`
-
 	// (Number) The storage quota of the project in GB's.
 	StorageQuota *float64 `json:"storageQuota,omitempty" tf:"storage_quota,omitempty"`
 
@@ -120,8 +117,18 @@ type ProjectParameters struct {
 	Public *bool `json:"public,omitempty" tf:"public,omitempty"`
 
 	// (Number) To enable project as Proxy Cache.
+	// +crossplane:generate:reference:type=github.com/globallogicuki/provider-harbor/apis/registry/v1alpha1.Registry
+	// +crossplane:generate:reference:extractor=github.com/globallogicuki/provider-harbor/config/common.ExtractRegistryId()
 	// +kubebuilder:validation:Optional
 	RegistryID *float64 `json:"registryId,omitempty" tf:"registry_id,omitempty"`
+
+	// Reference to a Registry in registry to populate registryId.
+	// +kubebuilder:validation:Optional
+	RegistryIDRef *v1.Reference `json:"registryIdRef,omitempty" tf:"-"`
+
+	// Selector for a Registry in registry to populate registryId.
+	// +kubebuilder:validation:Optional
+	RegistryIDSelector *v1.Selector `json:"registryIdSelector,omitempty" tf:"-"`
 
 	// (Number) The storage quota of the project in GB's.
 	// +kubebuilder:validation:Optional

@@ -1,6 +1,9 @@
 package replication
 
-import "github.com/crossplane/upjet/pkg/config"
+import (
+	"github.com/crossplane/upjet/pkg/config"
+	"github.com/globallogicuki/provider-harbor/config/common"
+)
 
 // Configure harbor_replication resource
 func Configure(p *config.Provider) {
@@ -8,7 +11,8 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = "registry"
 		r.Kind = "Replication"
 		r.References["registry_id"] = config.Reference{
-			Type: "github.com/globallogicuki/provider-harbor/apis/registry/v1alpha1.Registry",
+			Type:      "github.com/globallogicuki/provider-harbor/apis/registry/v1alpha1.Registry",
+			Extractor: common.RegistryIdExtractor,
 		}
 	})
 }
