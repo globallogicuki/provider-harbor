@@ -29,13 +29,13 @@ const (
 	// SelfPackagePath is the golang path for this package.
 	SelfPackagePath = "github.com/globallogicuki/provider-harbor/config/common"
 
-	// RegistryIdExtractor is the golang path to ExtractAccessor function
+	// RegistryIDExtractor is the golang path to ExtractAccessor function
 	// in this package.
-	RegistryIdExtractor = SelfPackagePath + ".ExtractRegistryId()"
+	RegistryIDExtractor = SelfPackagePath + ".ExtractRegistryID()"
 )
 
-// ExtractRegistryId extracts the registryId parameter from a registry object
-func ExtractRegistryId() reference.ExtractValueFn {
+// ExtractRegistryID extracts the registryId parameter from a registry object
+func ExtractRegistryID() reference.ExtractValueFn {
 	return func(mg resource.Managed) string {
 		paved, err := fieldpath.PaveObject(mg)
 		if err != nil {

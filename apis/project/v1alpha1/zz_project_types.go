@@ -118,7 +118,7 @@ type ProjectParameters struct {
 
 	// (Number) To enable project as Proxy Cache.
 	// +crossplane:generate:reference:type=github.com/globallogicuki/provider-harbor/apis/registry/v1alpha1.Registry
-	// +crossplane:generate:reference:extractor=github.com/globallogicuki/provider-harbor/config/common.ExtractRegistryId()
+	// +crossplane:generate:reference:extractor=github.com/globallogicuki/provider-harbor/config/common.ExtractRegistryID()
 	// +kubebuilder:validation:Optional
 	RegistryID *float64 `json:"registryId,omitempty" tf:"registry_id,omitempty"`
 

@@ -12,7 +12,7 @@ func Configure(p *config.Provider) {
 		r.Kind = "Replication"
 		r.References["registry_id"] = config.Reference{
 			Type:      "github.com/globallogicuki/provider-harbor/apis/registry/v1alpha1.Registry",
-			Extractor: common.RegistryIdExtractor,
+			Extractor: common.RegistryIDExtractor,
 		}
 	})
 }
