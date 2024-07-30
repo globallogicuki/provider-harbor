@@ -22,7 +22,7 @@ func (mg *Replication) ResolveReferences(ctx context.Context, c client.Reader) e
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromFloatPtrValue(mg.Spec.ForProvider.RegistryID),
-		Extract:      common.ExtractRegistryId(),
+		Extract:      common.ExtractRegistryID(),
 		Reference:    mg.Spec.ForProvider.RegistryIDRef,
 		Selector:     mg.Spec.ForProvider.RegistryIDSelector,
 		To: reference.To{
