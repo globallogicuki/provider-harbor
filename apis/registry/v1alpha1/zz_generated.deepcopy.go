@@ -435,6 +435,11 @@ func (in *ReplicationInitParameters) DeepCopyInto(out *ReplicationInitParameters
 		*out = new(string)
 		**out = **in
 	}
+	if in.CopyByChunk != nil {
+		in, out := &in.CopyByChunk, &out.CopyByChunk
+		*out = new(bool)
+		**out = **in
+	}
 	if in.Deletion != nil {
 		in, out := &in.Deletion, &out.Deletion
 		*out = new(bool)
@@ -544,6 +549,11 @@ func (in *ReplicationObservation) DeepCopyInto(out *ReplicationObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.CopyByChunk != nil {
+		in, out := &in.CopyByChunk, &out.CopyByChunk
+		*out = new(bool)
+		**out = **in
+	}
 	if in.Deletion != nil {
 		in, out := &in.Deletion, &out.Deletion
 		*out = new(bool)
@@ -634,6 +644,11 @@ func (in *ReplicationParameters) DeepCopyInto(out *ReplicationParameters) {
 	if in.Action != nil {
 		in, out := &in.Action, &out.Action
 		*out = new(string)
+		**out = **in
+	}
+	if in.CopyByChunk != nil {
+		in, out := &in.CopyByChunk, &out.CopyByChunk
+		*out = new(bool)
 		**out = **in
 	}
 	if in.Deletion != nil {

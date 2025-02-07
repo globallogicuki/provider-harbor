@@ -19,6 +19,7 @@ import (
 	v1alpha1group "github.com/globallogicuki/provider-harbor/apis/group/v1alpha1"
 	v1alpha1interrogationservices "github.com/globallogicuki/provider-harbor/apis/interrogationservices/v1alpha1"
 	v1alpha1label "github.com/globallogicuki/provider-harbor/apis/label/v1alpha1"
+	v1alpha1preheatinstance "github.com/globallogicuki/provider-harbor/apis/preheatinstance/v1alpha1"
 	v1alpha1project "github.com/globallogicuki/provider-harbor/apis/project/v1alpha1"
 	v1alpha1purgeauditlog "github.com/globallogicuki/provider-harbor/apis/purgeauditlog/v1alpha1"
 	v1alpha1registry "github.com/globallogicuki/provider-harbor/apis/registry/v1alpha1"
@@ -37,6 +38,7 @@ func init() {
 		v1alpha1group.SchemeBuilder.AddToScheme,
 		v1alpha1interrogationservices.SchemeBuilder.AddToScheme,
 		v1alpha1label.SchemeBuilder.AddToScheme,
+		v1alpha1preheatinstance.SchemeBuilder.AddToScheme,
 		v1alpha1project.SchemeBuilder.AddToScheme,
 		v1alpha1purgeauditlog.SchemeBuilder.AddToScheme,
 		v1alpha1registry.SchemeBuilder.AddToScheme,

@@ -11,7 +11,6 @@ import (
 	ujconfig "github.com/crossplane/upjet/pkg/config"
 
 	"github.com/globallogicuki/provider-harbor/config/configauth"
-	"github.com/globallogicuki/provider-harbor/config/configemail"
 	configsystem "github.com/globallogicuki/provider-harbor/config/configsecurity"
 	configsecurity "github.com/globallogicuki/provider-harbor/config/configsystem"
 	"github.com/globallogicuki/provider-harbor/config/garbagecollection"
@@ -62,7 +61,6 @@ func GetProvider() *ujconfig.Provider {
 	for _, configure := range []func(provider *ujconfig.Provider){
 		// add custom config functions
 		configauth.Configure,
-		configemail.Configure,
 		configsecurity.Configure,
 		configsystem.Configure,
 		garbagecollection.Configure,

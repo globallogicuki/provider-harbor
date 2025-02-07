@@ -10,13 +10,13 @@ import (
 	"github.com/crossplane/upjet/pkg/controller"
 
 	configauth "github.com/globallogicuki/provider-harbor/internal/controller/config/configauth"
-	configemail "github.com/globallogicuki/provider-harbor/internal/controller/config/configemail"
 	configsecurity "github.com/globallogicuki/provider-harbor/internal/controller/config/configsecurity"
 	configsystem "github.com/globallogicuki/provider-harbor/internal/controller/config/configsystem"
 	garbagecollection "github.com/globallogicuki/provider-harbor/internal/controller/garbagecollection/garbagecollection"
 	group "github.com/globallogicuki/provider-harbor/internal/controller/group/group"
 	interrogationservices "github.com/globallogicuki/provider-harbor/internal/controller/interrogationservices/interrogationservices"
 	label "github.com/globallogicuki/provider-harbor/internal/controller/label/label"
+	preheatinstance "github.com/globallogicuki/provider-harbor/internal/controller/preheatinstance/preheatinstance"
 	immutabletagrule "github.com/globallogicuki/provider-harbor/internal/controller/project/immutabletagrule"
 	membergroup "github.com/globallogicuki/provider-harbor/internal/controller/project/membergroup"
 	memberuser "github.com/globallogicuki/provider-harbor/internal/controller/project/memberuser"
@@ -37,13 +37,13 @@ import (
 func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
 		configauth.Setup,
-		configemail.Setup,
 		configsecurity.Setup,
 		configsystem.Setup,
 		garbagecollection.Setup,
 		group.Setup,
 		interrogationservices.Setup,
 		label.Setup,
+		preheatinstance.Setup,
 		immutabletagrule.Setup,
 		membergroup.Setup,
 		memberuser.Setup,

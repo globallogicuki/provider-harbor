@@ -66,6 +66,34 @@ spec:
                 type: string
               forProvider:
                 properties:
+                  auditLogForwardEndpoint:
+                    description: (String) The endpoint to forward audit logs to.
+                    type: string
+                  bannerMessage:
+                    description: (Block Set) (see below for nested schema)
+                    items:
+                      properties:
+                        closable:
+                          description: (Boolean) Whether or not the banner message
+                            is closable.
+                          type: boolean
+                        fromDate:
+                          description: '(String) The date the banner message will
+                            start displaying. (Format: MM/DD/YYYY)'
+                          type: string
+                        message:
+                          description: (String) The message to display in the banner.
+                          type: string
+                        toDate:
+                          description: '(String) The date the banner message will
+                            stop displaying. (Format: MM/DD/YYYY)'
+                          type: string
+                        type:
+                          description: (String) The type of banner message. Can be
+                            "info", "warning", "success" or "danger".
+                          type: string
+                      type: object
+                    type: array
                   projectCreationRestriction:
                     description: (String) Who can create projects within Harbor. Can
                       be "adminonly" or "everyone"
@@ -84,6 +112,9 @@ spec:
                   scannerSkipUpdatePulltime:
                     description: (Boolean) Whether or not to skip update pull time
                       for scanner.
+                    type: boolean
+                  skipAuditLogDatabase:
+                    description: (Boolean) Whether or not to skip audit log database.
                     type: boolean
                   storagePerProject:
                     description: 1 (unlimited).
@@ -101,6 +132,34 @@ spec:
                   for example because of an external controller is managing them,
                   like an autoscaler.
                 properties:
+                  auditLogForwardEndpoint:
+                    description: (String) The endpoint to forward audit logs to.
+                    type: string
+                  bannerMessage:
+                    description: (Block Set) (see below for nested schema)
+                    items:
+                      properties:
+                        closable:
+                          description: (Boolean) Whether or not the banner message
+                            is closable.
+                          type: boolean
+                        fromDate:
+                          description: '(String) The date the banner message will
+                            start displaying. (Format: MM/DD/YYYY)'
+                          type: string
+                        message:
+                          description: (String) The message to display in the banner.
+                          type: string
+                        toDate:
+                          description: '(String) The date the banner message will
+                            stop displaying. (Format: MM/DD/YYYY)'
+                          type: string
+                        type:
+                          description: (String) The type of banner message. Can be
+                            "info", "warning", "success" or "danger".
+                          type: string
+                      type: object
+                    type: array
                   projectCreationRestriction:
                     description: (String) Who can create projects within Harbor. Can
                       be "adminonly" or "everyone"
@@ -119,6 +178,9 @@ spec:
                   scannerSkipUpdatePulltime:
                     description: (Boolean) Whether or not to skip update pull time
                       for scanner.
+                    type: boolean
+                  skipAuditLogDatabase:
+                    description: (Boolean) Whether or not to skip audit log database.
                     type: boolean
                   storagePerProject:
                     description: 1 (unlimited).
@@ -289,6 +351,34 @@ spec:
             properties:
               atProvider:
                 properties:
+                  auditLogForwardEndpoint:
+                    description: (String) The endpoint to forward audit logs to.
+                    type: string
+                  bannerMessage:
+                    description: (Block Set) (see below for nested schema)
+                    items:
+                      properties:
+                        closable:
+                          description: (Boolean) Whether or not the banner message
+                            is closable.
+                          type: boolean
+                        fromDate:
+                          description: '(String) The date the banner message will
+                            start displaying. (Format: MM/DD/YYYY)'
+                          type: string
+                        message:
+                          description: (String) The message to display in the banner.
+                          type: string
+                        toDate:
+                          description: '(String) The date the banner message will
+                            stop displaying. (Format: MM/DD/YYYY)'
+                          type: string
+                        type:
+                          description: (String) The type of banner message. Can be
+                            "info", "warning", "success" or "danger".
+                          type: string
+                      type: object
+                    type: array
                   id:
                     description: (String) The ID of this resource.
                     type: string
@@ -310,6 +400,9 @@ spec:
                   scannerSkipUpdatePulltime:
                     description: (Boolean) Whether or not to skip update pull time
                       for scanner.
+                    type: boolean
+                  skipAuditLogDatabase:
+                    description: (Boolean) Whether or not to skip audit log database.
                     type: boolean
                   storagePerProject:
                     description: 1 (unlimited).

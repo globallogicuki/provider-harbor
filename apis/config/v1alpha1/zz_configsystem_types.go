@@ -17,7 +17,72 @@ import (
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
+type BannerMessageInitParameters struct {
+
+	// (Boolean) Whether or not the banner message is closable.
+	Closable *bool `json:"closable,omitempty" tf:"closable,omitempty"`
+
+	// (String) The date the banner message will start displaying. (Format: MM/DD/YYYY)
+	FromDate *string `json:"fromDate,omitempty" tf:"from_date,omitempty"`
+
+	// (String) The message to display in the banner.
+	Message *string `json:"message,omitempty" tf:"message,omitempty"`
+
+	// (String) The date the banner message will stop displaying. (Format: MM/DD/YYYY)
+	ToDate *string `json:"toDate,omitempty" tf:"to_date,omitempty"`
+
+	// (String) The type of banner message. Can be "info", "warning", "success" or "danger".
+	Type *string `json:"type,omitempty" tf:"type,omitempty"`
+}
+
+type BannerMessageObservation struct {
+
+	// (Boolean) Whether or not the banner message is closable.
+	Closable *bool `json:"closable,omitempty" tf:"closable,omitempty"`
+
+	// (String) The date the banner message will start displaying. (Format: MM/DD/YYYY)
+	FromDate *string `json:"fromDate,omitempty" tf:"from_date,omitempty"`
+
+	// (String) The message to display in the banner.
+	Message *string `json:"message,omitempty" tf:"message,omitempty"`
+
+	// (String) The date the banner message will stop displaying. (Format: MM/DD/YYYY)
+	ToDate *string `json:"toDate,omitempty" tf:"to_date,omitempty"`
+
+	// (String) The type of banner message. Can be "info", "warning", "success" or "danger".
+	Type *string `json:"type,omitempty" tf:"type,omitempty"`
+}
+
+type BannerMessageParameters struct {
+
+	// (Boolean) Whether or not the banner message is closable.
+	// +kubebuilder:validation:Optional
+	Closable *bool `json:"closable,omitempty" tf:"closable,omitempty"`
+
+	// (String) The date the banner message will start displaying. (Format: MM/DD/YYYY)
+	// +kubebuilder:validation:Optional
+	FromDate *string `json:"fromDate,omitempty" tf:"from_date,omitempty"`
+
+	// (String) The message to display in the banner.
+	// +kubebuilder:validation:Optional
+	Message *string `json:"message" tf:"message,omitempty"`
+
+	// (String) The date the banner message will stop displaying. (Format: MM/DD/YYYY)
+	// +kubebuilder:validation:Optional
+	ToDate *string `json:"toDate,omitempty" tf:"to_date,omitempty"`
+
+	// (String) The type of banner message. Can be "info", "warning", "success" or "danger".
+	// +kubebuilder:validation:Optional
+	Type *string `json:"type,omitempty" tf:"type,omitempty"`
+}
+
 type ConfigSystemInitParameters struct {
+
+	// (String) The endpoint to forward audit logs to.
+	AuditLogForwardEndpoint *string `json:"auditLogForwardEndpoint,omitempty" tf:"audit_log_forward_endpoint,omitempty"`
+
+	// (Block Set) (see below for nested schema)
+	BannerMessage []BannerMessageInitParameters `json:"bannerMessage,omitempty" tf:"banner_message,omitempty"`
 
 	// (String) Who can create projects within Harbor. Can be "adminonly" or "everyone"
 	ProjectCreationRestriction *string `json:"projectCreationRestriction,omitempty" tf:"project_creation_restriction,omitempty"`
@@ -34,11 +99,20 @@ type ConfigSystemInitParameters struct {
 	// (Boolean) Whether or not to skip update pull time for scanner.
 	ScannerSkipUpdatePulltime *bool `json:"scannerSkipUpdatePulltime,omitempty" tf:"scanner_skip_update_pulltime,omitempty"`
 
+	// (Boolean) Whether or not to skip audit log database.
+	SkipAuditLogDatabase *bool `json:"skipAuditLogDatabase,omitempty" tf:"skip_audit_log_database,omitempty"`
+
 	// 1 (unlimited).
 	StoragePerProject *float64 `json:"storagePerProject,omitempty" tf:"storage_per_project,omitempty"`
 }
 
 type ConfigSystemObservation struct {
+
+	// (String) The endpoint to forward audit logs to.
+	AuditLogForwardEndpoint *string `json:"auditLogForwardEndpoint,omitempty" tf:"audit_log_forward_endpoint,omitempty"`
+
+	// (Block Set) (see below for nested schema)
+	BannerMessage []BannerMessageObservation `json:"bannerMessage,omitempty" tf:"banner_message,omitempty"`
 
 	// (String) The ID of this resource.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
@@ -58,11 +132,22 @@ type ConfigSystemObservation struct {
 	// (Boolean) Whether or not to skip update pull time for scanner.
 	ScannerSkipUpdatePulltime *bool `json:"scannerSkipUpdatePulltime,omitempty" tf:"scanner_skip_update_pulltime,omitempty"`
 
+	// (Boolean) Whether or not to skip audit log database.
+	SkipAuditLogDatabase *bool `json:"skipAuditLogDatabase,omitempty" tf:"skip_audit_log_database,omitempty"`
+
 	// 1 (unlimited).
 	StoragePerProject *float64 `json:"storagePerProject,omitempty" tf:"storage_per_project,omitempty"`
 }
 
 type ConfigSystemParameters struct {
+
+	// (String) The endpoint to forward audit logs to.
+	// +kubebuilder:validation:Optional
+	AuditLogForwardEndpoint *string `json:"auditLogForwardEndpoint,omitempty" tf:"audit_log_forward_endpoint,omitempty"`
+
+	// (Block Set) (see below for nested schema)
+	// +kubebuilder:validation:Optional
+	BannerMessage []BannerMessageParameters `json:"bannerMessage,omitempty" tf:"banner_message,omitempty"`
 
 	// (String) Who can create projects within Harbor. Can be "adminonly" or "everyone"
 	// +kubebuilder:validation:Optional
@@ -83,6 +168,10 @@ type ConfigSystemParameters struct {
 	// (Boolean) Whether or not to skip update pull time for scanner.
 	// +kubebuilder:validation:Optional
 	ScannerSkipUpdatePulltime *bool `json:"scannerSkipUpdatePulltime,omitempty" tf:"scanner_skip_update_pulltime,omitempty"`
+
+	// (Boolean) Whether or not to skip audit log database.
+	// +kubebuilder:validation:Optional
+	SkipAuditLogDatabase *bool `json:"skipAuditLogDatabase,omitempty" tf:"skip_audit_log_database,omitempty"`
 
 	// 1 (unlimited).
 	// +kubebuilder:validation:Optional

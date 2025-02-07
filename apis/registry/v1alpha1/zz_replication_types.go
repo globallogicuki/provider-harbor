@@ -81,6 +81,9 @@ type ReplicationInitParameters struct {
 	// (String)
 	Action *string `json:"action,omitempty" tf:"action,omitempty"`
 
+	// (Boolean) Specify whether to enable the artifact blobs copied by chunks. (Default: false)
+	CopyByChunk *bool `json:"copyByChunk,omitempty" tf:"copy_by_chunk,omitempty"`
+
 	// (Boolean) Specify whether to delete the remote resources when locally deleted. (Default: false)
 	Deletion *bool `json:"deletion,omitempty" tf:"deletion,omitempty"`
 
@@ -119,6 +122,9 @@ type ReplicationObservation struct {
 
 	// (String)
 	Action *string `json:"action,omitempty" tf:"action,omitempty"`
+
+	// (Boolean) Specify whether to enable the artifact blobs copied by chunks. (Default: false)
+	CopyByChunk *bool `json:"copyByChunk,omitempty" tf:"copy_by_chunk,omitempty"`
 
 	// (Boolean) Specify whether to delete the remote resources when locally deleted. (Default: false)
 	Deletion *bool `json:"deletion,omitempty" tf:"deletion,omitempty"`
@@ -168,6 +174,10 @@ type ReplicationParameters struct {
 	// (String)
 	// +kubebuilder:validation:Optional
 	Action *string `json:"action,omitempty" tf:"action,omitempty"`
+
+	// (Boolean) Specify whether to enable the artifact blobs copied by chunks. (Default: false)
+	// +kubebuilder:validation:Optional
+	CopyByChunk *bool `json:"copyByChunk,omitempty" tf:"copy_by_chunk,omitempty"`
 
 	// (Boolean) Specify whether to delete the remote resources when locally deleted. (Default: false)
 	// +kubebuilder:validation:Optional
