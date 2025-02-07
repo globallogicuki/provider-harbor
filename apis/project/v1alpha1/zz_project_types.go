@@ -19,6 +19,9 @@ import (
 
 type ProjectInitParameters struct {
 
+	// (Boolean) Automatically generate SBOM for images pushed to this project. (Default: false) can only be used with Harbor version v2.11.0 and above
+	AutoSbomGeneration *bool `json:"autoSbomGeneration,omitempty" tf:"auto_sbom_generation,omitempty"`
+
 	// 123", "CVE-145"] or ["CVE-123"]
 	CveAllowlist []*string `json:"cveAllowlist,omitempty" tf:"cve_allowlist,omitempty"`
 
@@ -48,6 +51,9 @@ type ProjectInitParameters struct {
 }
 
 type ProjectObservation struct {
+
+	// (Boolean) Automatically generate SBOM for images pushed to this project. (Default: false) can only be used with Harbor version v2.11.0 and above
+	AutoSbomGeneration *bool `json:"autoSbomGeneration,omitempty" tf:"auto_sbom_generation,omitempty"`
 
 	// 123", "CVE-145"] or ["CVE-123"]
 	CveAllowlist []*string `json:"cveAllowlist,omitempty" tf:"cve_allowlist,omitempty"`
@@ -87,6 +93,10 @@ type ProjectObservation struct {
 }
 
 type ProjectParameters struct {
+
+	// (Boolean) Automatically generate SBOM for images pushed to this project. (Default: false) can only be used with Harbor version v2.11.0 and above
+	// +kubebuilder:validation:Optional
+	AutoSbomGeneration *bool `json:"autoSbomGeneration,omitempty" tf:"auto_sbom_generation,omitempty"`
 
 	// 123", "CVE-145"] or ["CVE-123"]
 	// +kubebuilder:validation:Optional

@@ -69,6 +69,10 @@ spec:
                   action:
                     description: (String)
                     type: string
+                  copyByChunk:
+                    description: '(Boolean) Specify whether to enable the artifact
+                      blobs copied by chunks. (Default: false)'
+                    type: boolean
                   deletion:
                     description: '(Boolean) Specify whether to delete the remote resources
                       when locally deleted. (Default: false)'
@@ -230,6 +234,10 @@ spec:
                   action:
                     description: (String)
                     type: string
+                  copyByChunk:
+                    description: '(Boolean) Specify whether to enable the artifact
+                      blobs copied by chunks. (Default: false)'
+                    type: boolean
                   deletion:
                     description: '(Boolean) Specify whether to delete the remote resources
                       when locally deleted. (Default: false)'
@@ -477,6 +485,10 @@ spec:
                   action:
                     description: (String)
                     type: string
+                  copyByChunk:
+                    description: '(Boolean) Specify whether to enable the artifact
+                      blobs copied by chunks. (Default: false)'
+                    type: boolean
                   deletion:
                     description: '(Boolean) Specify whether to delete the remote resources
                       when locally deleted. (Default: false)'

@@ -66,6 +66,11 @@ spec:
                 type: string
               forProvider:
                 properties:
+                  autoSbomGeneration:
+                    description: '(Boolean) Automatically generate SBOM for images
+                      pushed to this project. (Default: false) can only be used with
+                      Harbor version v2.11.0 and above'
+                    type: boolean
                   cveAllowlist:
                     description: 123", "CVE-145"] or ["CVE-123"]
                     items:
@@ -192,6 +197,11 @@ spec:
                   for example because of an external controller is managing them,
                   like an autoscaler.
                 properties:
+                  autoSbomGeneration:
+                    description: '(Boolean) Automatically generate SBOM for images
+                      pushed to this project. (Default: false) can only be used with
+                      Harbor version v2.11.0 and above'
+                    type: boolean
                   cveAllowlist:
                     description: 123", "CVE-145"] or ["CVE-123"]
                     items:
@@ -400,6 +410,11 @@ spec:
             properties:
               atProvider:
                 properties:
+                  autoSbomGeneration:
+                    description: '(Boolean) Automatically generate SBOM for images
+                      pushed to this project. (Default: false) can only be used with
+                      Harbor version v2.11.0 and above'
+                    type: boolean
                   cveAllowlist:
                     description: 123", "CVE-145"] or ["CVE-123"]
                     items:

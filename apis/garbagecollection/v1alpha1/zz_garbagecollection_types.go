@@ -22,7 +22,7 @@ type GarbageCollectionInitParameters struct {
 	// (Boolean) Allow garbage collection on untagged artifacts.
 	DeleteUntagged *bool `json:"deleteUntagged,omitempty" tf:"delete_untagged,omitempty"`
 
-	// (String) Sets the schedule how often the Garbage Collection will run.  Can be to "hourly", "daily", "weekly" or can be a custom cron string ie, "5 4 * * *"
+	// (String) Sets the schedule how often the Garbage Collection will run.  Can be to "hourly", "daily", "weekly" or can be a custom cron string ie, "0 5 4 * * *"
 	Schedule *string `json:"schedule,omitempty" tf:"schedule,omitempty"`
 
 	// (Number) Number of workers to run the garbage collection, value must be between 1 and 5.
@@ -37,7 +37,7 @@ type GarbageCollectionObservation struct {
 	// (String) The ID of this resource.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
-	// (String) Sets the schedule how often the Garbage Collection will run.  Can be to "hourly", "daily", "weekly" or can be a custom cron string ie, "5 4 * * *"
+	// (String) Sets the schedule how often the Garbage Collection will run.  Can be to "hourly", "daily", "weekly" or can be a custom cron string ie, "0 5 4 * * *"
 	Schedule *string `json:"schedule,omitempty" tf:"schedule,omitempty"`
 
 	// (Number) Number of workers to run the garbage collection, value must be between 1 and 5.
@@ -50,7 +50,7 @@ type GarbageCollectionParameters struct {
 	// +kubebuilder:validation:Optional
 	DeleteUntagged *bool `json:"deleteUntagged,omitempty" tf:"delete_untagged,omitempty"`
 
-	// (String) Sets the schedule how often the Garbage Collection will run.  Can be to "hourly", "daily", "weekly" or can be a custom cron string ie, "5 4 * * *"
+	// (String) Sets the schedule how often the Garbage Collection will run.  Can be to "hourly", "daily", "weekly" or can be a custom cron string ie, "0 5 4 * * *"
 	// +kubebuilder:validation:Optional
 	Schedule *string `json:"schedule,omitempty" tf:"schedule,omitempty"`
 

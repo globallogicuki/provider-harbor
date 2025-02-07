@@ -63,27 +63,6 @@ resources:
             oidc_verify_cert: (Boolean) Set to false if your OIDC server is using a self-signed certificate.
             primary_auth_mode: (Boolean) Default is false, set to true if you want to use the OIDC or LDAP mode as the primary auth mode.
         importStatements: []
-    harbor_config_email:
-        subCategory: ""
-        name: harbor_config_email
-        title: harbor_config_email Resource - terraform-provider-harbor
-        examples:
-            - name: main
-              manifest: |-
-                {
-                  "email_from": "dont_reply@acme.com",
-                  "email_host": "server.acme.com"
-                }
-        argumentDocs:
-            email_from: (String) The email from address ie, dont_reply@acme.com
-            email_host: (String) The FQDN of the email server
-            email_insecure: '(Boolean) Disables validation of email server certificate Default: false'
-            email_password: (String, Sensitive) The password for the email server
-            email_port: '(Number) The smtp port for the email server Default: 25'
-            email_ssl: (Boolean) Enable SSL for email server connection
-            email_username: (String) The username for the email server
-            id: (String) The ID of this resource.
-        importStatements: []
     harbor_config_security:
         subCategory: ""
         name: harbor_config_security
@@ -122,13 +101,21 @@ resources:
                   "storage_per_project": 100
                 }
         argumentDocs:
+            audit_log_forward_endpoint: (String) The endpoint to forward audit logs to.
+            banner_message: (Block Set) (see below for nested schema)
+            closable: (Boolean) Whether or not the banner message is closable.
+            from_date: '(String) The date the banner message will start displaying. (Format: MM/DD/YYYY)'
             id: (String) The ID of this resource.
+            message: (String) The message to display in the banner.
             project_creation_restriction: (String) Who can create projects within Harbor. Can be "adminonly" or "everyone"
             read_only: (Boolean) Whether or not the system is in read only mode.
             robot_name_prefix: (String) Robot account prefix.
             robot_token_expiration: (Number) The amount of time in days a robot account will expire.
             scanner_skip_update_pulltime: (Boolean) Whether or not to skip update pull time for scanner.
+            skip_audit_log_database: (Boolean) Whether or not to skip audit log database.
             storage_per_project: (Number) Default quota space per project in GIB. Default is -1 (unlimited).
+            to_date: '(String) The date the banner message will stop displaying. (Format: MM/DD/YYYY)'
+            type: (String) The type of banner message. Can be "info", "warning", "success" or "danger".
         importStatements: []
     harbor_garbage_collection:
         subCategory: ""
@@ -145,7 +132,7 @@ resources:
         argumentDocs:
             delete_untagged: (Boolean) Allow garbage collection on untagged artifacts.
             id: (String) The ID of this resource.
-            schedule: (String) Sets the schedule how often the Garbage Collection will run.  Can be to "hourly", "daily", "weekly" or can be a custom cron string ie, "5 4 * * *"
+            schedule: (String) Sets the schedule how often the Garbage Collection will run.  Can be to "hourly", "daily", "weekly" or can be a custom cron string ie, "0 5 4 * * *"
             workers: (Number) Number of workers to run the garbage collection, value must be between 1 and 5.
         importStatements: []
     harbor_group:
@@ -250,6 +237,42 @@ resources:
             scope: (String)
         importStatements:
             - terraform import harbor_label.main /labels/1
+    harbor_preheat_instance:
+        subCategory: ""
+        name: harbor_preheat_instance
+        title: harbor_preheat_instance Resource - terraform-provider-harbor
+        examples:
+            - name: example
+              manifest: |-
+                {
+                  "endpoint": "http://example.com",
+                  "name": "example-preheat-instance",
+                  "vendor": "dragonfly"
+                }
+            - name: example
+              manifest: |-
+                {
+                  "auth_mode": "BASIC",
+                  "endpoint": "http://example.com",
+                  "name": "example-preheat-instance",
+                  "password": "example-password",
+                  "username": "example-user",
+                  "vendor": "dragonfly"
+                }
+        argumentDocs:
+            auth_mode: (String) The authentication mode for the preheat instance. Must be either "NONE", "BASIC", or "OAUTH". Defaults to "NONE".
+            default: (Boolean) Whether the preheat instance is the default instance. Defaults to false.
+            description: (String) The description of the preheat instance. Defaults to an empty string.
+            enabled: (Boolean) Whether the preheat instance is enabled. Defaults to true.
+            endpoint: (String) The endpoint of the preheat instance.
+            id: (String) The ID of the preheat instance.
+            insecure: (Boolean) Whether to allow insecure connections to the preheat instance. Defaults to false.
+            name: (String) The name of the preheat instance.
+            password: (String, Sensitive) The password for the preheat instance. Required if auth_mode is "BASIC". Defaults to an empty string.
+            token: (String, Sensitive) The token for the preheat instance. Required if auth_mode is "OAUTH". Defaults to an empty string.
+            username: (String) The username for the preheat instance. Required if auth_mode is "BASIC". Defaults to an empty string.
+            vendor: (String) The vendor of the preheat instance. Must be either "dragonfly" or "kraken".
+        importStatements: []
     harbor_project:
         subCategory: ""
         name: harbor_project
@@ -258,6 +281,7 @@ resources:
             - name: main
               manifest: |-
                 {
+                  "auto_sbom_generation": true,
                   "enable_content_trust": true,
                   "enable_content_trust_cosign": false,
                   "name": "main",
@@ -280,6 +304,7 @@ resources:
                       "provider_name": "docker-hub"
                     }
         argumentDocs:
+            auto_sbom_generation: '(Boolean) Automatically generate SBOM for images pushed to this project. (Default: false) can only be used with Harbor version v2.11.0 and above'
             cve_allowlist: (List of String) Project allowlist allows vulnerabilities in this list to be ignored in this project when pushing and pulling images. Should be in the format or ["CVE-123", "CVE-145"] or ["CVE-123"]
             deployment_security: '(String) Prevent deployment of images with vulnerability severity equal or higher than the specified value. Images must be scanned before this takes effect. Possible values: "critical", "high", "medium", "low", "none". (Default: "" - empty)'
             enable_content_trust: '(Boolean) Enables Content Trust for project. When enabled it queries the embedded docker notary server. (Default: false).'
@@ -519,6 +544,7 @@ resources:
                     }
         argumentDocs:
             action: (String)
+            copy_by_chunk: '(Boolean) Specify whether to enable the artifact blobs copied by chunks. (Default: false)'
             decoration: (String) Matches or excludes the result. Can be one of the following. matches, excludes
             deletion: '(Boolean) Specify whether to delete the remote resources when locally deleted. (Default: false)'
             description: (String) Description of the replication policy.

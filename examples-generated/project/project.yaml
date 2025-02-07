@@ -8,6 +8,7 @@ metadata:
   name: main
 spec:
   forProvider:
+    autoSbomGeneration: true
     enableContentTrust: true
     enableContentTrustCosign: false
     name: main

@@ -4,11 +4,11 @@
 PROJECT_NAME ?= provider-harbor
 PROJECT_REPO ?= github.com/globallogicuki/$(PROJECT_NAME)
 
-export TERRAFORM_VERSION ?= 1.7.5
+export TERRAFORM_VERSION ?= 1.10.5
 
 export TERRAFORM_PROVIDER_SOURCE ?= goharbor/harbor
 export TERRAFORM_PROVIDER_REPO ?= https://github.com/goharbor/terraform-provider-harbor
-export TERRAFORM_PROVIDER_VERSION ?= 3.10.10
+export TERRAFORM_PROVIDER_VERSION ?= 3.10.19
 export TERRAFORM_PROVIDER_DOWNLOAD_NAME ?= terraform-provider-harbor
 export TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX ?= $(TERRAFORM_PROVIDER_REPO)/releases/download/v$(TERRAFORM_PROVIDER_VERSION)/
 export TERRAFORM_NATIVE_PROVIDER_BINARY ?= terraform-provider-harbor_v$(TERRAFORM_PROVIDER_VERSION)

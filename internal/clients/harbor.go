@@ -29,15 +29,18 @@ const (
 	url         = "url"
 	username    = "username"
 	password    = "password"
+	robotPrefix = "robot_prefix"
 	apiVersion  = "api_version"
 	bearerToken = "bearer_token"
 	insecure    = "insecure"
 )
 
 type harborConfig struct {
-	URL         *string `json:"url,omitempty"`
-	Username    *string `json:"username,omitempty"`
-	Password    *string `json:"password,omitempty"`
+	URL      *string `json:"url,omitempty"`
+	Username *string `json:"username,omitempty"`
+	Password *string `json:"password,omitempty"`
+	// robot_prefix is an optional field that specifies the prefix for robot account names in Harbor.
+	RobotPrefix *string `json:"robot_prefix,omitempty"`
 	APIVersion  *int    `json:"api_version,omitempty"`
 	BearerToken *string `json:"bearer_token,omitempty"`
 	Insecure    *bool   `json:"insecure,omitempty"`
@@ -52,6 +55,10 @@ func terraformProviderConfigurationBuilder(creds harborConfig) terraform.Provide
 
 	if creds.Username != nil {
 		cnf[username] = *creds.Username
+	}
+
+	if creds.RobotPrefix != nil {
+		cnf[robotPrefix] = *creds.RobotPrefix
 	}
 
 	if creds.Password != nil {
