@@ -58,7 +58,7 @@ UPTEST_VERSION = v0.5.0
 # ====================================================================================
 # Setup Images
 
-REGISTRY_ORGS ?= xpkg.upbound.io/globallogicuki 
+REGISTRY_ORGS ?= xpkg.upbound.io/globallogicuki
 IMAGES = $(PROJECT_NAME)
 -include build/makelib/imagelight.mk
 
@@ -68,7 +68,7 @@ IMAGES = $(PROJECT_NAME)
 XPKG_REG_ORGS ?= xpkg.upbound.io/globallogicuki
 # NOTE(hasheddan): skip promoting on xpkg.upbound.io as channel tags are
 # inferred.
-XPKG_REG_ORGS_NO_PROMOTE ?= xpkg.upbound.io/globallogicuki 
+XPKG_REG_ORGS_NO_PROMOTE ?= xpkg.upbound.io/globallogicuki
 XPKGS = $(PROJECT_NAME)
 -include build/makelib/xpkg.mk
 
@@ -141,7 +141,7 @@ go.cachedir:
 
 # Generate a coverage report for cobertura applying exclusions on
 # - generated file
-cobertura:mak
+cobertura:
 	@cat $(GO_TEST_OUTPUT)/coverage.txt | \
 		grep -v zz_ | \
 		$(GOCOVER_COBERTURA) > $(GO_TEST_OUTPUT)/cobertura-coverage.xml
