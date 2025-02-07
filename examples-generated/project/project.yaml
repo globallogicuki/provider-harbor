@@ -4,13 +4,13 @@ metadata:
   annotations:
     meta.upbound.io/example-id: project/v1alpha1/project
   labels:
-    testing.upbound.io/example-name: lornest
-  name: lornest
+    testing.upbound.io/example-name: main
+  name: main
 spec:
   forProvider:
     autoSbomGeneration: true
     enableContentTrust: true
     enableContentTrustCosign: false
-    name: lornest 
+    name: main
     public: false
     vulnerabilityScanning: true
