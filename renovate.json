@@ -1,10 +1,13 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+      "config:base"
+    ],
     "customManagers": [
       {
         "customType": "regex",
         "fileMatch": [
-          "^Makefile$"
+          "Makefile"
         ],
         "matchStrings": [
           "export TERRAFORM_PROVIDER_VERSION \\?= (?<currentValue>\\d+\\.\\d+\\.\\d+)"
@@ -13,6 +16,25 @@
         "depNameTemplate": "goharbor/terraform-provider-harbor",
         "versioningTemplate": "semver",
         "currentValueTemplate": "{{currentValue}}"
+      },
+      {
+        "customType": "regex",
+        "fileMatch": [
+          "Makefile"
+        ],
+        "matchStrings": [
+          "export TERRAFORM_VERSION \\?= (?<currentValue>\\d+\\.\\d+\\.\\d+)"
+        ],
+        "datasourceTemplate": "github-releases",
+        "depNameTemplate": "hashicorp/terraform",
+        "versioningTemplate": "hashicorp",
+        "currentValueTemplate": "{{currentValue}}"
       }
-    ]
+    ],
+    "gomod": {
+      "enabled": false
+    },
+    "github-actions": {
+      "enabled": false
+    }
   }
