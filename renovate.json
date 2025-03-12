@@ -3,6 +3,9 @@
     "extends": [
       "config:base"
     ],
+    "repositories": [
+      "globallogicuki/provider-harbor"
+    ],
     "customManagers": [
       {
         "customType": "regex",
