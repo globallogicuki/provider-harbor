@@ -15,7 +15,7 @@ jobs:
           private-key: ${{ secrets.private_key }}
           app-id: ${{ secrets.app_id }}
           owner: ${{ github.repository_owner }}
-          repositories: 'globallogicuki/provider-harbor'
+          repositories: 'provider-harbor'
 
       - name: Checkout
         uses: actions/checkout@v4.2.2
