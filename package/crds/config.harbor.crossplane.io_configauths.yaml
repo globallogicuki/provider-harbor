@@ -10,6 +10,7 @@ spec:
   names:
     categories:
     - crossplane
+    - TEST
     - managed
     - harbor
     kind: ConfigAuth
