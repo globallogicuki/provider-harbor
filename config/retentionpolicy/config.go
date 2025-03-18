@@ -8,7 +8,7 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = "project"
 		r.Kind = "RetentionPolicy"
 		r.References["scope"] = config.Reference{
-			Type: "github.com/globallogicuki/provider-harbor/apis/project/v1alpha1.Project",
+			TerraformName: "harbor_project",
 		}
 	})
 }
