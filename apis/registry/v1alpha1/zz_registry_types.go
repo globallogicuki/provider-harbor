@@ -35,6 +35,7 @@ type RegistryInitParameters struct {
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (String) The name of the provider.
+	// Can be one of: alibaba, artifact-hub, aws, azure, docker-hub, docker-registry, gitlab, github, google, harbor, huawei, jfrog, quay
 	ProviderName *string `json:"providerName,omitempty" tf:"provider_name,omitempty"`
 }
 
@@ -59,6 +60,7 @@ type RegistryObservation struct {
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (String) The name of the provider.
+	// Can be one of: alibaba, artifact-hub, aws, azure, docker-hub, docker-registry, gitlab, github, google, harbor, huawei, jfrog, quay
 	ProviderName *string `json:"providerName,omitempty" tf:"provider_name,omitempty"`
 
 	// (Number)
@@ -95,6 +97,7 @@ type RegistryParameters struct {
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (String) The name of the provider.
+	// Can be one of: alibaba, artifact-hub, aws, azure, docker-hub, docker-registry, gitlab, github, google, harbor, huawei, jfrog, quay
 	// +kubebuilder:validation:Optional
 	ProviderName *string `json:"providerName,omitempty" tf:"provider_name,omitempty"`
 }
