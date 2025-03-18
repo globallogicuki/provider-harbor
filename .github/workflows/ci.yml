@@ -45,12 +45,10 @@ jobs:
 
       - name: Get modified CRDs
         id: modified-crds
-        run: |
-          git fetch origin ${{ github.base_ref }} --depth=1
-          MODIFIED_CRD_LIST=$(git diff --name-only origin/${{ github.base_ref }} HEAD -- package/crds/)
-          echo "::set-output name=any_changed::$( [ -n \"$MODIFIED_CRD_LIST\" ] && echo 'true' || echo 'false' )"
-          echo "::set-output name=all_changed_files::$MODIFIED_CRD_LIST"
-        shell: bash
+        uses: tj-actions/changed-files@v46.0.1
+        with:
+          files: |
+            package/crds/**
       - name: Report breaking CRD OpenAPI v3 schema changes
         if: steps.modified-crds.outputs.any_changed == 'true'
         env:
