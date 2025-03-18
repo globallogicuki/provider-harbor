@@ -104,7 +104,9 @@ spec:
                     description: (String) The name of the register.
                     type: string
                   providerName:
-                    description: (String) The name of the provider.
+                    description: '(String) The name of the provider. Can be one of:
+                      alibaba, artifact-hub, aws, azure, docker-hub, docker-registry,
+                      gitlab, github, google, harbor, huawei, jfrog, quay'
                     type: string
                 type: object
               initProvider:
@@ -139,7 +141,9 @@ spec:
                     description: (String) The name of the register.
                     type: string
                   providerName:
-                    description: (String) The name of the provider.
+                    description: '(String) The name of the provider. Can be one of:
+                      alibaba, artifact-hub, aws, azure, docker-hub, docker-registry,
+                      gitlab, github, google, harbor, huawei, jfrog, quay'
                     type: string
                 type: object
               managementPolicies:
@@ -343,7 +347,9 @@ spec:
                     description: (String) The name of the register.
                     type: string
                   providerName:
-                    description: (String) The name of the provider.
+                    description: '(String) The name of the provider. Can be one of:
+                      alibaba, artifact-hub, aws, azure, docker-hub, docker-registry,
+                      gitlab, github, google, harbor, huawei, jfrog, quay'
                     type: string
                   registryId:
                     description: (Number)

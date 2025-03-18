@@ -9,7 +9,7 @@ for the [Harbor](https://goharbor.io/) API.
 Install the provider by using the following command after changing the image tag
 to the [latest release](https://marketplace.upbound.io/providers/globallogicuki/provider-harbor):
 ```
-up ctp provider install globallogicuki/provider-harbor:v0.1.0
+up ctp provider install globallogicuki/provider-harbor:v0.2.2
 ```
 
 Alternatively, you can use declarative installation:
@@ -20,7 +20,7 @@ kind: Provider
 metadata:
   name: provider-harbor
 spec:
-  package: globallogicuki/provider-harbor:v0.1.0
+  package: globallogicuki/provider-harbor:v0.2.2
 EOF
 ```
 
