@@ -95,16 +95,20 @@ spec:
                             the lasts n days.
                           type: number
                         repoExcluding:
-                          description: (String) For the repositories excluding.
+                          description: (String) For the repositories excluding. Use
+                            doublestar pattern for path matching.
                           type: string
                         repoMatching:
-                          description: (String) For the repositories matching.
+                          description: (String) For the repositories matching. Use
+                            doublestar pattern for path matching.
                           type: string
                         tagExcluding:
-                          description: (String) For the tag excluding.
+                          description: (String) For the tag excluding. Use doublestar
+                            pattern for path matching.
                           type: string
                         tagMatching:
-                          description: (String) For the tag matching.
+                          description: (String) For the tag matching. Use doublestar
+                            pattern for path matching.
                           type: string
                         untaggedArtifacts:
                           description: (Boolean) with untagged artifacts. Defaults
@@ -236,16 +240,20 @@ spec:
                             the lasts n days.
                           type: number
                         repoExcluding:
-                          description: (String) For the repositories excluding.
+                          description: (String) For the repositories excluding. Use
+                            doublestar pattern for path matching.
                           type: string
                         repoMatching:
-                          description: (String) For the repositories matching.
+                          description: (String) For the repositories matching. Use
+                            doublestar pattern for path matching.
                           type: string
                         tagExcluding:
-                          description: (String) For the tag excluding.
+                          description: (String) For the tag excluding. Use doublestar
+                            pattern for path matching.
                           type: string
                         tagMatching:
-                          description: (String) For the tag matching.
+                          description: (String) For the tag matching. Use doublestar
+                            pattern for path matching.
                           type: string
                         untaggedArtifacts:
                           description: (Boolean) with untagged artifacts. Defaults
@@ -461,16 +469,20 @@ spec:
                             the lasts n days.
                           type: number
                         repoExcluding:
-                          description: (String) For the repositories excluding.
+                          description: (String) For the repositories excluding. Use
+                            doublestar pattern for path matching.
                           type: string
                         repoMatching:
-                          description: (String) For the repositories matching.
+                          description: (String) For the repositories matching. Use
+                            doublestar pattern for path matching.
                           type: string
                         tagExcluding:
-                          description: (String) For the tag excluding.
+                          description: (String) For the tag excluding. Use doublestar
+                            pattern for path matching.
                           type: string
                         tagMatching:
-                          description: (String) For the tag matching.
+                          description: (String) For the tag matching. Use doublestar
+                            pattern for path matching.
                           type: string
                         untaggedArtifacts:
                           description: (Boolean) with untagged artifacts. Defaults

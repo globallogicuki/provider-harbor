@@ -23,15 +23,19 @@ type ImmutableTagRuleInitParameters struct {
 	Disabled *bool `json:"disabled,omitempty" tf:"disabled,omitempty"`
 
 	// (String) For the repositories excluding.
+	// Use doublestar pattern for path matching.
 	RepoExcluding *string `json:"repoExcluding,omitempty" tf:"repo_excluding,omitempty"`
 
 	// (String) For the repositories matching.
+	// Use doublestar pattern for path matching.
 	RepoMatching *string `json:"repoMatching,omitempty" tf:"repo_matching,omitempty"`
 
 	// (String) For the tag excluding.
+	// Use doublestar pattern for path matching.
 	TagExcluding *string `json:"tagExcluding,omitempty" tf:"tag_excluding,omitempty"`
 
 	// (String) For the tag matching.
+	// Use doublestar pattern for path matching.
 	TagMatching *string `json:"tagMatching,omitempty" tf:"tag_matching,omitempty"`
 }
 
@@ -47,15 +51,19 @@ type ImmutableTagRuleObservation struct {
 	ProjectID *string `json:"projectId,omitempty" tf:"project_id,omitempty"`
 
 	// (String) For the repositories excluding.
+	// Use doublestar pattern for path matching.
 	RepoExcluding *string `json:"repoExcluding,omitempty" tf:"repo_excluding,omitempty"`
 
 	// (String) For the repositories matching.
+	// Use doublestar pattern for path matching.
 	RepoMatching *string `json:"repoMatching,omitempty" tf:"repo_matching,omitempty"`
 
 	// (String) For the tag excluding.
+	// Use doublestar pattern for path matching.
 	TagExcluding *string `json:"tagExcluding,omitempty" tf:"tag_excluding,omitempty"`
 
 	// (String) For the tag matching.
+	// Use doublestar pattern for path matching.
 	TagMatching *string `json:"tagMatching,omitempty" tf:"tag_matching,omitempty"`
 }
 
@@ -79,18 +87,22 @@ type ImmutableTagRuleParameters struct {
 	ProjectIDSelector *v1.Selector `json:"projectIdSelector,omitempty" tf:"-"`
 
 	// (String) For the repositories excluding.
+	// Use doublestar pattern for path matching.
 	// +kubebuilder:validation:Optional
 	RepoExcluding *string `json:"repoExcluding,omitempty" tf:"repo_excluding,omitempty"`
 
 	// (String) For the repositories matching.
+	// Use doublestar pattern for path matching.
 	// +kubebuilder:validation:Optional
 	RepoMatching *string `json:"repoMatching,omitempty" tf:"repo_matching,omitempty"`
 
 	// (String) For the tag excluding.
+	// Use doublestar pattern for path matching.
 	// +kubebuilder:validation:Optional
 	TagExcluding *string `json:"tagExcluding,omitempty" tf:"tag_excluding,omitempty"`
 
 	// (String) For the tag matching.
+	// Use doublestar pattern for path matching.
 	// +kubebuilder:validation:Optional
 	TagMatching *string `json:"tagMatching,omitempty" tf:"tag_matching,omitempty"`
 }
