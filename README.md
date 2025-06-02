@@ -20,7 +20,7 @@ kind: Provider
 metadata:
   name: provider-harbor
 spec:
-  package: globallogicuki/provider-harbor:v0.2.2
+  package: xpkg.upbound.io/globallogicuki/provider-harbor:v0.2.3
 EOF
 ```
 
