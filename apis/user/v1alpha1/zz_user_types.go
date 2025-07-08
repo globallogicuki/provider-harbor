@@ -30,6 +30,9 @@ type UserInitParameters struct {
 
 	// (String) The Full Name of the internal user.
 	FullName *string `json:"fullName,omitempty" tf:"full_name,omitempty"`
+
+	// (String) The username of the internal user.
+	Username *string `json:"username,omitempty" tf:"username,omitempty"`
 }
 
 type UserObservation struct {
@@ -48,6 +51,9 @@ type UserObservation struct {
 
 	// (String) The ID of this resource.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
+
+	// (String) The username of the internal user.
+	Username *string `json:"username,omitempty" tf:"username,omitempty"`
 }
 
 type UserParameters struct {
@@ -71,6 +77,10 @@ type UserParameters struct {
 	// (String, Sensitive) The password for the internal user.
 	// +kubebuilder:validation:Optional
 	PasswordSecretRef v1.SecretKeySelector `json:"passwordSecretRef" tf:"-"`
+
+	// (String) The username of the internal user.
+	// +kubebuilder:validation:Optional
+	Username *string `json:"username,omitempty" tf:"username,omitempty"`
 }
 
 // UserSpec defines the desired state of User
@@ -111,6 +121,7 @@ type User struct {
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.email) || (has(self.initProvider) && has(self.initProvider.email))",message="spec.forProvider.email is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.fullName) || (has(self.initProvider) && has(self.initProvider.fullName))",message="spec.forProvider.fullName is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.passwordSecretRef)",message="spec.forProvider.passwordSecretRef is a required parameter"
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.username) || (has(self.initProvider) && has(self.initProvider.username))",message="spec.forProvider.username is a required parameter"
 	Spec   UserSpec   `json:"spec"`
 	Status UserStatus `json:"status,omitempty"`
 }
