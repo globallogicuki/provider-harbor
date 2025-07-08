@@ -98,9 +98,6 @@ spec:
                     - name
                     - namespace
                     type: object
-                  username:
-                    description: (String) The username of the internal user.
-                    type: string
                 type: object
               initProvider:
                 description: THIS IS A BETA FIELD. It will be honored unless the Management
@@ -127,9 +124,6 @@ spec:
                     type: string
                   fullName:
                     description: (String) The Full Name of the internal user.
-                    type: string
-                  username:
-                    description: (String) The username of the internal user.
                     type: string
                 type: object
               managementPolicies:
@@ -304,10 +298,6 @@ spec:
             - message: spec.forProvider.passwordSecretRef is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.passwordSecretRef)'
-            - message: spec.forProvider.username is a required parameter
-              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.username)
-                || (has(self.initProvider) && has(self.initProvider.username))'
           status:
             description: UserStatus defines the observed state of User.
             properties:
@@ -329,9 +319,6 @@ spec:
                     type: string
                   id:
                     description: (String) The ID of this resource.
-                    type: string
-                  username:
-                    description: (String) The username of the internal user.
                     type: string
                 type: object
               conditions:
