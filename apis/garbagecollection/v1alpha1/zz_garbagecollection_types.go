@@ -25,7 +25,7 @@ type GarbageCollectionInitParameters struct {
 	// (String) Sets the schedule how often the Garbage Collection will run.  Can be to "hourly", "daily", "weekly" or can be a custom cron string ie, "0 5 4 * * *"
 	Schedule *string `json:"schedule,omitempty" tf:"schedule,omitempty"`
 
-	// (Number) Number of workers to run the garbage collection, value must be between 1 and 5.
+	// (Number) Number of workers to run the garbage collection, value must be greater than or equal to one. Harbor limits the number of concurrent workers internally, setting this value higher than what Harbor supports will result in an error.
 	Workers *float64 `json:"workers,omitempty" tf:"workers,omitempty"`
 }
 
@@ -40,7 +40,7 @@ type GarbageCollectionObservation struct {
 	// (String) Sets the schedule how often the Garbage Collection will run.  Can be to "hourly", "daily", "weekly" or can be a custom cron string ie, "0 5 4 * * *"
 	Schedule *string `json:"schedule,omitempty" tf:"schedule,omitempty"`
 
-	// (Number) Number of workers to run the garbage collection, value must be between 1 and 5.
+	// (Number) Number of workers to run the garbage collection, value must be greater than or equal to one. Harbor limits the number of concurrent workers internally, setting this value higher than what Harbor supports will result in an error.
 	Workers *float64 `json:"workers,omitempty" tf:"workers,omitempty"`
 }
 
@@ -54,7 +54,7 @@ type GarbageCollectionParameters struct {
 	// +kubebuilder:validation:Optional
 	Schedule *string `json:"schedule,omitempty" tf:"schedule,omitempty"`
 
-	// (Number) Number of workers to run the garbage collection, value must be between 1 and 5.
+	// (Number) Number of workers to run the garbage collection, value must be greater than or equal to one. Harbor limits the number of concurrent workers internally, setting this value higher than what Harbor supports will result in an error.
 	// +kubebuilder:validation:Optional
 	Workers *float64 `json:"workers,omitempty" tf:"workers,omitempty"`
 }
