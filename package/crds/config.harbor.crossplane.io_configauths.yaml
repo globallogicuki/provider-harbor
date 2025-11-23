@@ -181,6 +181,11 @@ spec:
                     description: (String) The name of the claim in the token whose
                       values is the list of group names.
                     type: string
+                  oidcLogout:
+                    description: '(Boolean) Set to true if you want to enable OIDC
+                      Session Logout (Default: false) can only be used with Harbor
+                      version v2.13 and above'
+                    type: boolean
                   oidcName:
                     description: (String) The name of the oidc provider name.
                     type: string
@@ -290,6 +295,11 @@ spec:
                     description: (String) The name of the claim in the token whose
                       values is the list of group names.
                     type: string
+                  oidcLogout:
+                    description: '(Boolean) Set to true if you want to enable OIDC
+                      Session Logout (Default: false) can only be used with Harbor
+                      version v2.13 and above'
+                    type: boolean
                   oidcName:
                     description: (String) The name of the oidc provider name.
                     type: string
@@ -560,6 +570,11 @@ spec:
                     description: (String) The name of the claim in the token whose
                       values is the list of group names.
                     type: string
+                  oidcLogout:
+                    description: '(Boolean) Set to true if you want to enable OIDC
+                      Session Logout (Default: false) can only be used with Harbor
+                      version v2.13 and above'
+                    type: boolean
                   oidcName:
                     description: (String) The name of the oidc provider name.
                     type: string

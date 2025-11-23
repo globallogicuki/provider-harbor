@@ -82,6 +82,9 @@ type ConfigAuthInitParameters struct {
 	// (String) The name of the claim in the token whose values is the list of group names.
 	OidcGroupsClaim *string `json:"oidcGroupsClaim,omitempty" tf:"oidc_groups_claim,omitempty"`
 
+	// (Boolean) Set to true if you want to enable OIDC Session Logout (Default: false) can only be used with Harbor version v2.13 and above
+	OidcLogout *bool `json:"oidcLogout,omitempty" tf:"oidc_logout,omitempty"`
+
 	// (String) The name of the oidc provider name.
 	OidcName *string `json:"oidcName,omitempty" tf:"oidc_name,omitempty"`
 
@@ -165,6 +168,9 @@ type ConfigAuthObservation struct {
 
 	// (String) The name of the claim in the token whose values is the list of group names.
 	OidcGroupsClaim *string `json:"oidcGroupsClaim,omitempty" tf:"oidc_groups_claim,omitempty"`
+
+	// (Boolean) Set to true if you want to enable OIDC Session Logout (Default: false) can only be used with Harbor version v2.13 and above
+	OidcLogout *bool `json:"oidcLogout,omitempty" tf:"oidc_logout,omitempty"`
 
 	// (String) The name of the oidc provider name.
 	OidcName *string `json:"oidcName,omitempty" tf:"oidc_name,omitempty"`
@@ -275,6 +281,10 @@ type ConfigAuthParameters struct {
 	// (String) The name of the claim in the token whose values is the list of group names.
 	// +kubebuilder:validation:Optional
 	OidcGroupsClaim *string `json:"oidcGroupsClaim,omitempty" tf:"oidc_groups_claim,omitempty"`
+
+	// (Boolean) Set to true if you want to enable OIDC Session Logout (Default: false) can only be used with Harbor version v2.13 and above
+	// +kubebuilder:validation:Optional
+	OidcLogout *bool `json:"oidcLogout,omitempty" tf:"oidc_logout,omitempty"`
 
 	// (String) The name of the oidc provider name.
 	// +kubebuilder:validation:Optional
