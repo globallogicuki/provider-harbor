@@ -40,6 +40,9 @@ type WebhookInitParameters struct {
 	// (String) The notification type either http or slack.
 	NotifyType *string `json:"notifyType,omitempty" tf:"notify_type,omitempty"`
 
+	// (String) Payload format sent by the webhook. Values are Default or CloudEvents.
+	PayloadFormat *string `json:"payloadFormat,omitempty" tf:"payload_format,omitempty"`
+
 	// (String) The project id of the harbor that webhook related to.
 	ProjectID *string `json:"projectId,omitempty" tf:"project_id,omitempty"`
 
@@ -72,6 +75,9 @@ type WebhookObservation struct {
 
 	// (String) The notification type either http or slack.
 	NotifyType *string `json:"notifyType,omitempty" tf:"notify_type,omitempty"`
+
+	// (String) Payload format sent by the webhook. Values are Default or CloudEvents.
+	PayloadFormat *string `json:"payloadFormat,omitempty" tf:"payload_format,omitempty"`
 
 	// (String) The project id of the harbor that webhook related to.
 	ProjectID *string `json:"projectId,omitempty" tf:"project_id,omitempty"`
@@ -109,6 +115,10 @@ type WebhookParameters struct {
 	// (String) The notification type either http or slack.
 	// +kubebuilder:validation:Optional
 	NotifyType *string `json:"notifyType,omitempty" tf:"notify_type,omitempty"`
+
+	// (String) Payload format sent by the webhook. Values are Default or CloudEvents.
+	// +kubebuilder:validation:Optional
+	PayloadFormat *string `json:"payloadFormat,omitempty" tf:"payload_format,omitempty"`
 
 	// (String) The project id of the harbor that webhook related to.
 	// +kubebuilder:validation:Optional

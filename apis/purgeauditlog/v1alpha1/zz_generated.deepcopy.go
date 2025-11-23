@@ -47,6 +47,11 @@ func (in *PurgeAuditLogInitParameters) DeepCopyInto(out *PurgeAuditLogInitParame
 		*out = new(float64)
 		**out = **in
 	}
+	if in.IncludeEventTypes != nil {
+		in, out := &in.IncludeEventTypes, &out.IncludeEventTypes
+		*out = new(string)
+		**out = **in
+	}
 	if in.IncludeOperations != nil {
 		in, out := &in.IncludeOperations, &out.IncludeOperations
 		*out = new(string)
@@ -114,6 +119,11 @@ func (in *PurgeAuditLogObservation) DeepCopyInto(out *PurgeAuditLogObservation) 
 		*out = new(string)
 		**out = **in
 	}
+	if in.IncludeEventTypes != nil {
+		in, out := &in.IncludeEventTypes, &out.IncludeEventTypes
+		*out = new(string)
+		**out = **in
+	}
 	if in.IncludeOperations != nil {
 		in, out := &in.IncludeOperations, &out.IncludeOperations
 		*out = new(string)
@@ -142,6 +152,11 @@ func (in *PurgeAuditLogParameters) DeepCopyInto(out *PurgeAuditLogParameters) {
 	if in.AuditRetentionHour != nil {
 		in, out := &in.AuditRetentionHour, &out.AuditRetentionHour
 		*out = new(float64)
+		**out = **in
+	}
+	if in.IncludeEventTypes != nil {
+		in, out := &in.IncludeEventTypes, &out.IncludeEventTypes
+		*out = new(string)
 		**out = **in
 	}
 	if in.IncludeOperations != nil {
