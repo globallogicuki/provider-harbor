@@ -1,0 +1,323 @@
+# ====================================================================================
+# Local Development Setup for provider-harbor
+#
+# This file extends the main Makefile with local development helpers.
+# It is included by the main Makefile via "-include Makefile.dev"
+#
+# ====================================================================================
+
+# Configuration
+KIND_CLUSTER_NAME = harbor
+HARBOR_NAMESPACE = harbor
+HARBOR_ADMIN_PASSWORD = Harbor12345
+HARBOR_PORT = 30002
+LOCAL_HARBOR_URL = http://localhost:8080
+
+.PHONY: dev-setup dev-setup-cluster dev-setup-harbor dev-setup-crossplane dev-setup-provider dev-cleanup dev-status dev-restart-forward dev-run dev-stop dev-logs
+
+# ====================================================================================
+# Main Setup Target
+
+# Complete local development setup
+dev-setup: dev-setup-cluster dev-setup-harbor dev-setup-crossplane dev-setup-provider
+	@echo ""
+	@echo "✅ Local development environment is ready!"
+	@echo ""
+	@echo "📝 Next steps:"
+	@echo "  1. Run 'make dev-run' to start the provider"
+	@echo "  2. Apply examples, e.g.: kubectl apply -f examples/replication/replication.yaml"
+	@echo "  3. Check resources, e.g.: kubectl get projects,registries,replications"
+	@echo ""
+	@echo "💡 Useful commands:"
+	@echo "  - make dev-status          Check environment status"
+	@echo "  - make dev-restart-forward Restart port forwarding"
+	@echo "  - make dev-cleanup         Tear down everything"
+	@echo ""
+
+# ====================================================================================
+# Individual Setup Steps
+
+# Create kind cluster
+dev-setup-cluster:
+	@echo "🔧 Checking for kind cluster $(KIND_CLUSTER_NAME)..."
+	@if ! command -v kind >/dev/null 2>&1; then \
+		echo "❌ Error: kind is not installed. Please install: https://kind.sigs.k8s.io/"; \
+		exit 1; \
+	fi
+	@if kind get clusters 2>/dev/null | grep -q "^$(KIND_CLUSTER_NAME)$$"; then \
+		echo "✓ Cluster $(KIND_CLUSTER_NAME) already exists"; \
+	else \
+		echo "Creating kind cluster..."; \
+		kind create cluster --name $(KIND_CLUSTER_NAME); \
+	fi
+	@echo "Setting kubectl context..."
+	@kubectl config use-context kind-$(KIND_CLUSTER_NAME)
+	@echo "✅ Kind cluster ready"
+	@echo "   Context: kind-$(KIND_CLUSTER_NAME)"
+	@kubectl cluster-info --context kind-$(KIND_CLUSTER_NAME) | head -1
+
+# Install Harbor
+dev-setup-harbor:
+	@echo "🔧 Setting up Harbor in cluster..."
+	@if ! command -v helm >/dev/null 2>&1; then \
+		echo "❌ Error: helm is not installed. Please install: https://helm.sh/"; \
+		exit 1; \
+	fi
+	@echo "Adding Harbor helm repo..."
+	@helm repo add harbor https://helm.goharbor.io 2>/dev/null || true
+	@helm repo update harbor >/dev/null 2>&1
+	@if helm list -n $(HARBOR_NAMESPACE) 2>/dev/null | grep -q my-harbor; then \
+		echo "✓ Harbor already installed"; \
+	else \
+		echo "Installing Harbor (this may take a few minutes)..."; \
+		kubectl create namespace $(HARBOR_NAMESPACE) --dry-run=client -o yaml | kubectl apply -f - >/dev/null; \
+		helm install my-harbor harbor/harbor \
+			--namespace $(HARBOR_NAMESPACE) \
+			--set expose.type=nodePort \
+			--set expose.tls.enabled=false \
+			--set expose.nodePort.ports.http.nodePort=$(HARBOR_PORT) \
+			--set persistence.enabled=false \
+			--set harborAdminPassword=$(HARBOR_ADMIN_PASSWORD) \
+			--set trivy.enabled=false \
+			--wait --timeout=5m; \
+	fi
+	@echo "⏳ Waiting for Harbor pods to be ready..."
+	@kubectl wait --for=condition=ready pod -l component=core -n $(HARBOR_NAMESPACE) --timeout=300s 2>/dev/null || true
+	@echo "Setting up port-forward to localhost:8080..."
+	@pkill -f "port-forward.*harbor.*8080" 2>/dev/null || true
+	@sleep 1
+	@kubectl --context kind-$(KIND_CLUSTER_NAME) port-forward -n $(HARBOR_NAMESPACE) svc/harbor 8080:80 >/dev/null 2>&1 &
+	@sleep 3
+	@echo "✅ Harbor ready at http://localhost:8080"
+	@echo "   Username: admin"
+	@echo "   Password: $(HARBOR_ADMIN_PASSWORD)"
+	@if ps aux | grep -q "[p]ort-forward.*harbor.*8080"; then \
+		echo "   ✓ Port-forward is active"; \
+	else \
+		echo "   ⚠️  Port-forward may have failed. Try:"; \
+		echo "      kubectl port-forward -n harbor svc/harbor 8080:80"; \
+	fi
+
+# Install Crossplane
+dev-setup-crossplane:
+	@echo "🔧 Setting up Crossplane..."
+	@helm repo add crossplane-stable https://charts.crossplane.io/stable 2>/dev/null || true
+	@helm repo update crossplane-stable >/dev/null 2>&1
+	@if helm list -n crossplane-system 2>/dev/null | grep -q crossplane; then \
+		echo "✓ Crossplane already installed"; \
+	else \
+		echo "Installing Crossplane..."; \
+		helm install crossplane \
+			--namespace crossplane-system \
+			--create-namespace \
+			crossplane-stable/crossplane \
+			--wait --timeout=5m; \
+	fi
+	@echo "⏳ Waiting for Crossplane to be ready..."
+	@kubectl wait --for=condition=ready pod -l app=crossplane -n crossplane-system --timeout=300s
+	@echo "✅ Crossplane ready"
+
+# Install provider CRDs and config
+dev-setup-provider:
+	@echo "🔧 Installing provider CRDs and configuration..."
+	@kubectl apply -f package/crds/ >/dev/null
+	@echo "⏳ Waiting for CRDs to be established..."
+	@sleep 3
+	@kubectl wait --for condition=established --timeout=60s crd/providerconfigs.harbor.crossplane.io 2>/dev/null || true
+	@echo "Creating ProviderConfig with local Harbor credentials..."
+	@mkdir -p .work/dev
+	@printf 'apiVersion: v1\n' > .work/dev/provider-secret.yaml
+	@printf 'kind: Secret\n' >> .work/dev/provider-secret.yaml
+	@printf 'metadata:\n' >> .work/dev/provider-secret.yaml
+	@printf '  name: harbor-credentials\n' >> .work/dev/provider-secret.yaml
+	@printf '  namespace: crossplane-system\n' >> .work/dev/provider-secret.yaml
+	@printf 'type: Opaque\n' >> .work/dev/provider-secret.yaml
+	@printf 'stringData:\n' >> .work/dev/provider-secret.yaml
+	@printf '  credentials: |\n' >> .work/dev/provider-secret.yaml
+	@printf '    {\n' >> .work/dev/provider-secret.yaml
+	@printf '      "username": "admin",\n' >> .work/dev/provider-secret.yaml
+	@printf '      "password": "%s",\n' "$(HARBOR_ADMIN_PASSWORD)" >> .work/dev/provider-secret.yaml
+	@printf '      "url": "%s"\n' "$(LOCAL_HARBOR_URL)" >> .work/dev/provider-secret.yaml
+	@printf '    }\n' >> .work/dev/provider-secret.yaml
+	@kubectl apply -f .work/dev/provider-secret.yaml >/dev/null
+	@printf 'apiVersion: harbor.crossplane.io/v1beta1\n' > .work/dev/providerconfig.yaml
+	@printf 'kind: ProviderConfig\n' >> .work/dev/providerconfig.yaml
+	@printf 'metadata:\n' >> .work/dev/providerconfig.yaml
+	@printf '  name: default\n' >> .work/dev/providerconfig.yaml
+	@printf 'spec:\n' >> .work/dev/providerconfig.yaml
+	@printf '  credentials:\n' >> .work/dev/providerconfig.yaml
+	@printf '    source: Secret\n' >> .work/dev/providerconfig.yaml
+	@printf '    secretRef:\n' >> .work/dev/providerconfig.yaml
+	@printf '      name: harbor-credentials\n' >> .work/dev/providerconfig.yaml
+	@printf '      namespace: crossplane-system\n' >> .work/dev/providerconfig.yaml
+	@printf '      key: credentials\n' >> .work/dev/providerconfig.yaml
+	@kubectl apply -f .work/dev/providerconfig.yaml >/dev/null
+	@echo "✅ Provider CRDs and config installed"
+
+# ====================================================================================
+# Provider Management
+
+# Run provider in the background
+dev-run:
+	@if [ -f .work/dev/provider.pid ]; then \
+		if ps -p $$(cat .work/dev/provider.pid) > /dev/null 2>&1; then \
+			echo "⚠️  Provider is already running (PID: $$(cat .work/dev/provider.pid))"; \
+			echo "   Run 'make dev-stop' to stop it first"; \
+			exit 1; \
+		fi; \
+	fi
+	@echo "🚀 Starting provider in background..."
+	@mkdir -p .work/dev
+	@UPBOUND_CONTEXT="local" $(MAKE) run > .work/dev/provider.log 2>&1 & echo $$! > .work/dev/provider.pid
+	@sleep 2
+	@if ps -p $$(cat .work/dev/provider.pid) > /dev/null 2>&1; then \
+		echo "✅ Provider running (PID: $$(cat .work/dev/provider.pid))"; \
+		echo "   Logs: .work/dev/provider.log"; \
+		echo "   Tail logs: make dev-logs"; \
+		echo "   Stop: make dev-stop or make dev-cleanup (to clean up all resources)"; \
+	else \
+		echo "❌ Provider failed to start. Check logs:"; \
+		echo "   tail .work/dev/provider.log"; \
+		rm -f .work/dev/provider.pid; \
+		exit 1; \
+	fi
+
+# Stop background provider
+dev-stop:
+	@if [ ! -f .work/dev/provider.pid ]; then \
+		echo "⚠️  No provider PID file found"; \
+		echo "   Provider may not be running"; \
+	else \
+		PID=$$(cat .work/dev/provider.pid); \
+		if ps -p $$PID > /dev/null 2>&1; then \
+			echo "🛑 Stopping provider (PID: $$PID)..."; \
+			kill $$PID 2>/dev/null || true; \
+			sleep 2; \
+			if ps -p $$PID > /dev/null 2>&1; then \
+				echo "   Force killing..."; \
+				kill -9 $$PID 2>/dev/null || true; \
+			fi; \
+			echo "✅ Provider stopped"; \
+		else \
+			echo "⚠️  Provider (PID: $$PID) is not running"; \
+		fi; \
+		rm -f .work/dev/provider.pid; \
+	fi
+
+# Tail provider logs
+dev-logs:
+	@if [ ! -f .work/dev/provider.log ]; then \
+		echo "❌ No log file found at .work/dev/provider.log"; \
+		echo "   Run 'make dev-run' first"; \
+		exit 1; \
+	fi
+	@echo "📋 Tailing provider logs (Ctrl+C to exit)..."
+	@tail -f .work/dev/provider.log
+
+# ====================================================================================
+# Utility Targets
+
+# Clean up local development environment
+dev-cleanup:
+	@echo "🧹 Cleaning up local development environment..."
+	@if [ -f .work/dev/provider.pid ]; then \
+		$(MAKE) dev-stop; \
+	fi
+	@pkill -f "port-forward.*harbor.*8080" 2>/dev/null || true
+	@kind delete cluster --name $(KIND_CLUSTER_NAME) 2>/dev/null || true
+	@rm -rf .work/dev
+	@echo "✅ Local development environment cleaned up"
+
+# Restart port forwarding (useful if it dies)
+dev-restart-forward:
+	@echo "🔄 Restarting port-forward..."
+	@pkill -f "port-forward.*harbor.*8080" 2>/dev/null || true
+	@sleep 1
+	@kubectl --context kind-$(KIND_CLUSTER_NAME) port-forward -n $(HARBOR_NAMESPACE) svc/harbor 8080:80 >/dev/null 2>&1 &
+	@sleep 2
+	@if ps aux | grep -q "[p]ort-forward.*harbor.*8080"; then \
+		echo "✅ Port-forward active on localhost:8080"; \
+	else \
+		echo "❌ Port-forward failed. Manually run:"; \
+		echo "   kubectl --context kind-$(KIND_CLUSTER_NAME) port-forward -n harbor svc/harbor 8080:80"; \
+	fi
+
+# Show status of local development environment
+dev-status:
+	@echo "================================================"
+	@echo "Local Development Environment Status"
+	@echo "================================================"
+	@echo ""
+	@echo "🔹 Kind Cluster:"
+	@if kind get clusters 2>/dev/null | grep -q "^$(KIND_CLUSTER_NAME)$$"; then \
+		echo "   ✅ Cluster '$(KIND_CLUSTER_NAME)' exists"; \
+		kubectl cluster-info --context kind-$(KIND_CLUSTER_NAME) 2>/dev/null | head -1 | sed 's/^/   /'; \
+	else \
+		echo "   ❌ Cluster '$(KIND_CLUSTER_NAME)' not found"; \
+	fi
+	@echo ""
+	@echo "🔹 Harbor:"
+	@if kubectl get namespace $(HARBOR_NAMESPACE) >/dev/null 2>&1; then \
+		kubectl get pods -n $(HARBOR_NAMESPACE) 2>/dev/null | grep my-harbor | sed 's/^/   /' || echo "   ❌ Harbor not found"; \
+		if curl -s http://localhost:8080 >/dev/null 2>&1; then \
+			echo "   ✅ Harbor accessible at http://localhost:8080"; \
+		else \
+			echo "   ⚠️  Harbor not accessible (port-forward may be down)"; \
+		fi; \
+	else \
+		echo "   ❌ Harbor namespace not found"; \
+	fi
+	@echo ""
+	@echo "🔹 Crossplane:"
+	@if kubectl get namespace crossplane-system >/dev/null 2>&1; then \
+		kubectl get pods -n crossplane-system 2>/dev/null | grep crossplane | sed 's/^/   /' || echo "   ❌ Crossplane not found"; \
+	else \
+		echo "   ❌ Crossplane namespace not found"; \
+	fi
+	@echo ""
+	@echo "🔹 Port Forward:"
+	@if ps aux | grep -q "[p]ort-forward.*svc/my-harbor"; then \
+		echo "   ✅ Port forward active (localhost:8080 → Harbor)"; \
+	else \
+		echo "   ❌ Port forward not active"; \
+		echo "      Run: make dev-restart-forward"; \
+	fi
+	@echo ""
+	@echo "🔹 ProviderConfig:"
+	@if kubectl get providerconfig default >/dev/null 2>&1; then \
+		echo "   ✅ ProviderConfig 'default' exists"; \
+	else \
+		echo "   ❌ ProviderConfig not found"; \
+	fi
+	@echo ""
+	@echo "================================================"
+
+# Help target
+dev-help:
+	@echo "Local Development Targets:"
+	@echo ""
+	@echo "Setup:"
+	@echo "  dev-setup              Complete setup (cluster + harbor + crossplane + provider)"
+	@echo "  dev-setup-cluster      Create kind cluster only"
+	@echo "  dev-setup-harbor       Install Harbor only"
+	@echo "  dev-setup-crossplane   Install Crossplane only"
+	@echo "  dev-setup-provider     Install provider CRDs and config only"
+	@echo ""
+	@echo "Provider:"
+	@echo "  dev-run                Run provider in background"
+	@echo "  dev-stop               Stop background provider"
+	@echo "  dev-logs               Tail provider logs (Ctrl+C to exit)"
+	@echo ""
+	@echo "Utilities:"
+	@echo "  dev-status             Show status of all components"
+	@echo "  dev-restart-forward    Restart port-forwarding if it stops"
+	@echo "  dev-cleanup            Delete everything (cluster, provider, configs, etc.)"
+	@echo ""
+	@echo "Configuration (can be overridden):"
+	@echo "  KIND_CLUSTER_NAME=$(KIND_CLUSTER_NAME)"
+	@echo "  HARBOR_NAMESPACE=$(HARBOR_NAMESPACE)"
+	@echo "  HARBOR_ADMIN_PASSWORD=$(HARBOR_ADMIN_PASSWORD)"
+	@echo "  LOCAL_HARBOR_URL=$(LOCAL_HARBOR_URL)"
+	@echo ""
+
+.PHONY: dev-help
