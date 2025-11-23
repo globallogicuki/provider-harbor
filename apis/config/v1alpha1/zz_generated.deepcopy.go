@@ -268,6 +268,11 @@ func (in *ConfigAuthInitParameters) DeepCopyInto(out *ConfigAuthInitParameters) 
 		*out = new(string)
 		**out = **in
 	}
+	if in.OidcLogout != nil {
+		in, out := &in.OidcLogout, &out.OidcLogout
+		*out = new(bool)
+		**out = **in
+	}
 	if in.OidcName != nil {
 		in, out := &in.OidcName, &out.OidcName
 		*out = new(string)
@@ -450,6 +455,11 @@ func (in *ConfigAuthObservation) DeepCopyInto(out *ConfigAuthObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.OidcLogout != nil {
+		in, out := &in.OidcLogout, &out.OidcLogout
+		*out = new(bool)
+		**out = **in
+	}
 	if in.OidcName != nil {
 		in, out := &in.OidcName, &out.OidcName
 		*out = new(string)
@@ -603,6 +613,11 @@ func (in *ConfigAuthParameters) DeepCopyInto(out *ConfigAuthParameters) {
 	if in.OidcGroupsClaim != nil {
 		in, out := &in.OidcGroupsClaim, &out.OidcGroupsClaim
 		*out = new(string)
+		**out = **in
+	}
+	if in.OidcLogout != nil {
+		in, out := &in.OidcLogout, &out.OidcLogout
+		*out = new(bool)
 		**out = **in
 	}
 	if in.OidcName != nil {

@@ -181,6 +181,8 @@ spec:
                     description: (String) The name of the claim in the token whose
                       values is the list of group names.
                     type: string
+                  oidcLogout:
+                    type: boolean
                   oidcName:
                     description: (String) The name of the oidc provider name.
                     type: string
@@ -290,6 +292,8 @@ spec:
                     description: (String) The name of the claim in the token whose
                       values is the list of group names.
                     type: string
+                  oidcLogout:
+                    type: boolean
                   oidcName:
                     description: (String) The name of the oidc provider name.
                     type: string
@@ -560,6 +564,8 @@ spec:
                     description: (String) The name of the claim in the token whose
                       values is the list of group names.
                     type: string
+                  oidcLogout:
+                    type: boolean
                   oidcName:
                     description: (String) The name of the oidc provider name.
                     type: string

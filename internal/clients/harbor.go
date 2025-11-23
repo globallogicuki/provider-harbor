@@ -32,6 +32,7 @@ const (
 	robotPrefix = "robot_prefix"
 	apiVersion  = "api_version"
 	bearerToken = "bearer_token"
+	sessionId   = "session_id"
 	insecure    = "insecure"
 )
 
@@ -43,6 +44,7 @@ type harborConfig struct {
 	RobotPrefix *string `json:"robot_prefix,omitempty"`
 	APIVersion  *int    `json:"api_version,omitempty"`
 	BearerToken *string `json:"bearer_token,omitempty"`
+	SessionId   *string `json:"session_id,omitempty"`
 	Insecure    *bool   `json:"insecure,omitempty"`
 }
 
@@ -71,6 +73,10 @@ func terraformProviderConfigurationBuilder(creds harborConfig) terraform.Provide
 
 	if creds.BearerToken != nil {
 		cnf[bearerToken] = *creds.BearerToken
+	}
+
+	if creds.SessionId != nil {
+		cnf[sessionId] = *creds.SessionId
 	}
 
 	if creds.Insecure != nil {
