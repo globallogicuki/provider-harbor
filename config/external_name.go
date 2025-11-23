@@ -30,7 +30,7 @@ var ExternalNameConfigs = map[string]config.ExternalName{
 	"harbor_retention_policy":       config.IdentifierFromProvider,
 	"harbor_robot_account":          config.IdentifierFromProvider,
 	"harbor_tasks":                  config.IdentifierFromProvider,
-	"harbor_user":                   config.IdentifierFromProvider,
+	"harbor_user":                   config.ParameterAsIdentifier("username"),
 }
 
 // ExternalNameConfigurations applies all external name configs listed in the
