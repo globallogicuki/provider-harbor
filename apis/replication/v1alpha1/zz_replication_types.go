@@ -90,9 +90,6 @@ type ReplicationInitParameters struct {
 	// (String) Description of the replication policy.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
-	// (String) Specify the destination namespace. if empty, the resource will be put under the same namespace as the source.
-	DestNamespace *string `json:"destNamespace,omitempty" tf:"dest_namespace,omitempty"`
-
 	// 1 to 3 are valid values in the harbor API. A value of -1 will 'Flatten All Levels', 0 means 'No Flattening', 1 'Flatten 1 Level', 2 'Flatten 2 Levels', 3 'Flatten 3 Levels' (Default: -1, see Replication Rules for more details)
 	DestNamespaceReplace *float64 `json:"destNamespaceReplace,omitempty" tf:"dest_namespace_replace,omitempty"`
 
@@ -188,12 +185,22 @@ type ReplicationParameters struct {
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
 	// (String) Specify the destination namespace. if empty, the resource will be put under the same namespace as the source.
+	// +crossplane:generate:reference:type=github.com/globallogicuki/provider-harbor/apis/project/v1alpha1.Project
+	// +crossplane:generate:reference:extractor=github.com/globallogicuki/provider-harbor/config/common.ExtractProjectName()
 	// +kubebuilder:validation:Optional
 	DestNamespace *string `json:"destNamespace,omitempty" tf:"dest_namespace,omitempty"`
+
+	// Reference to a Project in project to populate destNamespace.
+	// +kubebuilder:validation:Optional
+	DestNamespaceRef *v1.Reference `json:"destNamespaceRef,omitempty" tf:"-"`
 
 	// 1 to 3 are valid values in the harbor API. A value of -1 will 'Flatten All Levels', 0 means 'No Flattening', 1 'Flatten 1 Level', 2 'Flatten 2 Levels', 3 'Flatten 3 Levels' (Default: -1, see Replication Rules for more details)
 	// +kubebuilder:validation:Optional
 	DestNamespaceReplace *float64 `json:"destNamespaceReplace,omitempty" tf:"dest_namespace_replace,omitempty"`
+
+	// Selector for a Project in project to populate destNamespace.
+	// +kubebuilder:validation:Optional
+	DestNamespaceSelector *v1.Selector `json:"destNamespaceSelector,omitempty" tf:"-"`
 
 	// (Boolean) Specify whether the replication is enabled. (Default: true)
 	// +kubebuilder:validation:Optional

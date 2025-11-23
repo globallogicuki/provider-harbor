@@ -4,9 +4,9 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.13.0
-  name: replications.registry.harbor.crossplane.io
+  name: replications.replication.harbor.crossplane.io
 spec:
-  group: registry.harbor.crossplane.io
+  group: replication.harbor.crossplane.io
   names:
     categories:
     - crossplane
@@ -84,12 +84,85 @@ spec:
                     description: (String) Specify the destination namespace. if empty,
                       the resource will be put under the same namespace as the source.
                     type: string
+                  destNamespaceRef:
+                    description: Reference to a Project in project to populate destNamespace.
+                    properties:
+                      name:
+                        description: Name of the referenced object.
+                        type: string
+                      policy:
+                        description: Policies for referencing.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: Resolution specifies whether resolution of
+                              this reference is required. The default is 'Required',
+                              which means the reconcile will fail if the reference
+                              cannot be resolved. 'Optional' means this reference
+                              will be a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: Resolve specifies when this reference should
+                              be resolved. The default is 'IfNotPresent', which will
+                              attempt to resolve the reference only when the corresponding
+                              field is not present. Use 'Always' to resolve the reference
+                              on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    required:
+                    - name
+                    type: object
                   destNamespaceReplace:
                     description: '1 to 3 are valid values in the harbor API. A value
                       of -1 will ''Flatten All Levels'', 0 means ''No Flattening'',
                       1 ''Flatten 1 Level'', 2 ''Flatten 2 Levels'', 3 ''Flatten 3
                       Levels'' (Default: -1, see Replication Rules for more details)'
                     type: number
+                  destNamespaceSelector:
+                    description: Selector for a Project in project to populate destNamespace.
+                    properties:
+                      matchControllerRef:
+                        description: MatchControllerRef ensures an object with the
+                          same controller reference as the selecting object is selected.
+                        type: boolean
+                      matchLabels:
+                        additionalProperties:
+                          type: string
+                        description: MatchLabels ensures an object with matching labels
+                          is selected.
+                        type: object
+                      policy:
+                        description: Policies for selection.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: Resolution specifies whether resolution of
+                              this reference is required. The default is 'Required',
+                              which means the reconcile will fail if the reference
+                              cannot be resolved. 'Optional' means this reference
+                              will be a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: Resolve specifies when this reference should
+                              be resolved. The default is 'IfNotPresent', which will
+                              attempt to resolve the reference only when the corresponding
+                              field is not present. Use 'Always' to resolve the reference
+                              on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    type: object
                   enabled:
                     description: '(Boolean) Specify whether the replication is enabled.
                       (Default: true)'
@@ -244,10 +317,6 @@ spec:
                     type: boolean
                   description:
                     description: (String) Description of the replication policy.
-                    type: string
-                  destNamespace:
-                    description: (String) Specify the destination namespace. if empty,
-                      the resource will be put under the same namespace as the source.
                     type: string
                   destNamespaceReplace:
                     description: '1 to 3 are valid values in the harbor API. A value

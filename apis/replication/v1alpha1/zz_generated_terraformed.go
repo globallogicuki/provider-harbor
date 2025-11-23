@@ -17,18 +17,18 @@ import (
 	"github.com/crossplane/upjet/pkg/resource/json"
 )
 
-// GetTerraformResourceType returns Terraform resource type for this Registry
-func (mg *Registry) GetTerraformResourceType() string {
-	return "harbor_registry"
+// GetTerraformResourceType returns Terraform resource type for this Replication
+func (mg *Replication) GetTerraformResourceType() string {
+	return "harbor_replication"
 }
 
-// GetConnectionDetailsMapping for this Registry
-func (tr *Registry) GetConnectionDetailsMapping() map[string]string {
-	return map[string]string{"access_secret": "spec.forProvider.accessSecretSecretRef"}
+// GetConnectionDetailsMapping for this Replication
+func (tr *Replication) GetConnectionDetailsMapping() map[string]string {
+	return nil
 }
 
-// GetObservation of this Registry
-func (tr *Registry) GetObservation() (map[string]any, error) {
+// GetObservation of this Replication
+func (tr *Replication) GetObservation() (map[string]any, error) {
 	o, err := json.TFParser.Marshal(tr.Status.AtProvider)
 	if err != nil {
 		return nil, err
@@ -37,8 +37,8 @@ func (tr *Registry) GetObservation() (map[string]any, error) {
 	return base, json.TFParser.Unmarshal(o, &base)
 }
 
-// SetObservation for this Registry
-func (tr *Registry) SetObservation(obs map[string]any) error {
+// SetObservation for this Replication
+func (tr *Replication) SetObservation(obs map[string]any) error {
 	p, err := json.TFParser.Marshal(obs)
 	if err != nil {
 		return err
@@ -46,16 +46,16 @@ func (tr *Registry) SetObservation(obs map[string]any) error {
 	return json.TFParser.Unmarshal(p, &tr.Status.AtProvider)
 }
 
-// GetID returns ID of underlying Terraform resource of this Registry
-func (tr *Registry) GetID() string {
+// GetID returns ID of underlying Terraform resource of this Replication
+func (tr *Replication) GetID() string {
 	if tr.Status.AtProvider.ID == nil {
 		return ""
 	}
 	return *tr.Status.AtProvider.ID
 }
 
-// GetParameters of this Registry
-func (tr *Registry) GetParameters() (map[string]any, error) {
+// GetParameters of this Replication
+func (tr *Replication) GetParameters() (map[string]any, error) {
 	p, err := json.TFParser.Marshal(tr.Spec.ForProvider)
 	if err != nil {
 		return nil, err
@@ -64,8 +64,8 @@ func (tr *Registry) GetParameters() (map[string]any, error) {
 	return base, json.TFParser.Unmarshal(p, &base)
 }
 
-// SetParameters for this Registry
-func (tr *Registry) SetParameters(params map[string]any) error {
+// SetParameters for this Replication
+func (tr *Replication) SetParameters(params map[string]any) error {
 	p, err := json.TFParser.Marshal(params)
 	if err != nil {
 		return err
@@ -73,8 +73,8 @@ func (tr *Registry) SetParameters(params map[string]any) error {
 	return json.TFParser.Unmarshal(p, &tr.Spec.ForProvider)
 }
 
-// GetInitParameters of this Registry
-func (tr *Registry) GetInitParameters() (map[string]any, error) {
+// GetInitParameters of this Replication
+func (tr *Replication) GetInitParameters() (map[string]any, error) {
 	p, err := json.TFParser.Marshal(tr.Spec.InitProvider)
 	if err != nil {
 		return nil, err
@@ -83,10 +83,10 @@ func (tr *Registry) GetInitParameters() (map[string]any, error) {
 	return base, json.TFParser.Unmarshal(p, &base)
 }
 
-// LateInitialize this Registry using its observed tfState.
+// LateInitialize this Replication using its observed tfState.
 // returns True if there are any spec changes for the resource.
-func (tr *Registry) LateInitialize(attrs []byte) (bool, error) {
-	params := &RegistryParameters{}
+func (tr *Replication) LateInitialize(attrs []byte) (bool, error) {
+	params := &ReplicationParameters{}
 	if err := json.TFParser.Unmarshal(attrs, params); err != nil {
 		return false, errors.Wrap(err, "failed to unmarshal Terraform state parameters for late-initialization")
 	}
@@ -97,6 +97,6 @@ func (tr *Registry) LateInitialize(attrs []byte) (bool, error) {
 }
 
 // GetTerraformSchemaVersion returns the associated Terraform schema version
-func (tr *Registry) GetTerraformSchemaVersion() int {
+func (tr *Replication) GetTerraformSchemaVersion() int {
 	return 0
 }
