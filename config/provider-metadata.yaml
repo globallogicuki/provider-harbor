@@ -418,6 +418,7 @@ resources:
             id: (String) The ID of this resource.
             name: (String) The name of the webhook that will be created in harbor.
             notify_type: (String) The notification type either http or slack.
+            payload_format: (String) Payload format sent by the webhook. Values are Default or CloudEvents.
             project_id: (String) The project id of the harbor that webhook related to.
             skip_cert_verify: (Boolean) checks the for validate SSL certificate.
         importStatements: []
@@ -436,7 +437,8 @@ resources:
         argumentDocs:
             audit_retention_hour: (Number) To configure how long audit logs should be kept. For example, if you set this to 24 Harbor will only purge audit logs that are 24 or more hours old.
             id: (String) The ID of this resource.
-            include_operations: (String) Valid values are create delete pull, thoses values can be comma separated. When Create, Delete, or Pull is set, Harbor will include audit logs for those operations in the purge.
+            include_event_types: (String) Valid values are push, pull, delete, those values can be comma separated. When Push, Pull, or Delete is set, Harbor will include audit logs for those events in the purge (minimal version Harbor 2.13).
+            include_operations: (String) Valid values are create delete pull, thoses values can be comma separated. When Create, Delete, or Pull is set, Harbor will include audit logs for those operations in the purge. (starting with Harbor 2.13 this parameter has been replaced by include_event_types)
             schedule: (String) Sets the schedule how often the Garbage Collection will run.  Can be to "Hourly", "Daily", "Weekly" or can be a custom cron string ie, "5 4 * * *"
         importStatements: []
     harbor_registry:

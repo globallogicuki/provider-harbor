@@ -8,7 +8,7 @@ export TERRAFORM_VERSION ?= 1.10.5
 
 export TERRAFORM_PROVIDER_SOURCE ?= goharbor/harbor
 export TERRAFORM_PROVIDER_REPO ?= https://github.com/goharbor/terraform-provider-harbor
-export TERRAFORM_PROVIDER_VERSION ?= 3.10.23
+export TERRAFORM_PROVIDER_VERSION ?= 3.11.2
 export TERRAFORM_PROVIDER_DOWNLOAD_NAME ?= terraform-provider-harbor
 export TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX ?= $(TERRAFORM_PROVIDER_REPO)/releases/download/v$(TERRAFORM_PROVIDER_VERSION)/
 export TERRAFORM_NATIVE_PROVIDER_BINARY ?= terraform-provider-harbor_v$(TERRAFORM_PROVIDER_VERSION)
@@ -121,6 +121,9 @@ pull-docs:
 	@if [ ! -d "$(WORK_DIR)/$(TERRAFORM_PROVIDER_SOURCE)" ]; then \
   		mkdir -p "$(WORK_DIR)/$(TERRAFORM_PROVIDER_SOURCE)" && \
 		git clone -c advice.detachedHead=false --depth 1 --filter=blob:none --branch "v$(TERRAFORM_PROVIDER_VERSION)" --sparse "$(TERRAFORM_PROVIDER_REPO)" "$(WORK_DIR)/$(TERRAFORM_PROVIDER_SOURCE)"; \
+	else \
+		git -C "$(WORK_DIR)/$(TERRAFORM_PROVIDER_SOURCE)" fetch --depth 1 origin "v$(TERRAFORM_PROVIDER_VERSION)" && \
+		git -C "$(WORK_DIR)/$(TERRAFORM_PROVIDER_SOURCE)" checkout FETCH_HEAD; \
 	fi
 	@git -C "$(WORK_DIR)/$(TERRAFORM_PROVIDER_SOURCE)" sparse-checkout set "$(TERRAFORM_DOCS_PATH)"
 

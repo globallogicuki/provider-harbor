@@ -92,6 +92,10 @@ spec:
                   notifyType:
                     description: (String) The notification type either http or slack.
                     type: string
+                  payloadFormat:
+                    description: (String) Payload format sent by the webhook. Values
+                      are Default or CloudEvents.
+                    type: string
                   projectId:
                     description: (String) The project id of the harbor that webhook
                       related to.
@@ -137,6 +141,10 @@ spec:
                     type: string
                   notifyType:
                     description: (String) The notification type either http or slack.
+                    type: string
+                  payloadFormat:
+                    description: (String) Payload format sent by the webhook. Values
+                      are Default or CloudEvents.
                     type: string
                   projectId:
                     description: (String) The project id of the harbor that webhook
@@ -360,6 +368,10 @@ spec:
                     type: string
                   notifyType:
                     description: (String) The notification type either http or slack.
+                    type: string
+                  payloadFormat:
+                    description: (String) Payload format sent by the webhook. Values
+                      are Default or CloudEvents.
                     type: string
                   projectId:
                     description: (String) The project id of the harbor that webhook
