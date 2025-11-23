@@ -1,0 +1,40 @@
+---
+# Create a destination project
+apiVersion: project.harbor.crossplane.io/v1alpha1
+kind: Project
+metadata:
+  name: example-dest-project
+spec:
+  forProvider:
+    name: destination-project
+    public: false
+    vulnerabilityScanning: true
+---
+# Create a registry
+apiVersion: registry.harbor.crossplane.io/v1alpha1
+kind: Registry
+metadata:
+  name: example-registry
+spec:
+  forProvider:
+    name: example-docker-hub
+    providerName: docker-hub
+    endpointUrl: https://hub.docker.com
+---
+# Create replication policy with cross-resource references
+apiVersion: replication.harbor.crossplane.io/v1alpha1
+kind: Replication
+metadata:
+  name: example-replication
+spec:
+  forProvider:
+    name: example-replication-policy
+    action: push
+    # Reference the project by name using the custom extractor
+    destNamespaceRef:
+      name: example-dest-project
+    # Reference the registry by ID
+    registryIdRef:
+      name: example-registry
+    schedule: "0 0 0 * * *"
+    enabled: true

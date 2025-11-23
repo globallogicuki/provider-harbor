@@ -23,7 +23,7 @@ import (
 	"github.com/crossplane/upjet/pkg/terraform"
 	ctrl "sigs.k8s.io/controller-runtime"
 
-	v1alpha1 "github.com/globallogicuki/provider-harbor/apis/registry/v1alpha1"
+	v1alpha1 "github.com/globallogicuki/provider-harbor/apis/replication/v1alpha1"
 	features "github.com/globallogicuki/provider-harbor/internal/features"
 )
 
