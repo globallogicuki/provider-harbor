@@ -7,7 +7,6 @@ package v1alpha1
 
 import (
 	"context"
-
 	reference "github.com/crossplane/crossplane-runtime/pkg/reference"
 	common "github.com/globallogicuki/provider-harbor/config/common"
 	errors "github.com/pkg/errors"
