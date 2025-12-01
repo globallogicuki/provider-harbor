@@ -22,7 +22,10 @@ type PurgeAuditLogInitParameters struct {
 	// (Number) To configure how long audit logs should be kept. For example, if you set this to 24 Harbor will only purge audit logs that are 24 or more hours old.
 	AuditRetentionHour *float64 `json:"auditRetentionHour,omitempty" tf:"audit_retention_hour,omitempty"`
 
-	// (String) Valid values are create delete pull, thoses values can be comma separated. When Create, Delete, or Pull is set, Harbor will include audit logs for those operations in the purge.
+	// (String) Valid values are push, pull, delete, those values can be comma separated. When Push, Pull, or Delete is set, Harbor will include audit logs for those events in the purge (minimal version Harbor 2.13).
+	IncludeEventTypes *string `json:"includeEventTypes,omitempty" tf:"include_event_types,omitempty"`
+
+	// (String) Valid values are create delete pull, thoses values can be comma separated. When Create, Delete, or Pull is set, Harbor will include audit logs for those operations in the purge. (starting with Harbor 2.13 this parameter has been replaced by include_event_types)
 	IncludeOperations *string `json:"includeOperations,omitempty" tf:"include_operations,omitempty"`
 
 	// (String) Sets the schedule how often the Garbage Collection will run.  Can be to "Hourly", "Daily", "Weekly" or can be a custom cron string ie, "5 4 * * *"
@@ -37,7 +40,10 @@ type PurgeAuditLogObservation struct {
 	// (String) The ID of this resource.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
-	// (String) Valid values are create delete pull, thoses values can be comma separated. When Create, Delete, or Pull is set, Harbor will include audit logs for those operations in the purge.
+	// (String) Valid values are push, pull, delete, those values can be comma separated. When Push, Pull, or Delete is set, Harbor will include audit logs for those events in the purge (minimal version Harbor 2.13).
+	IncludeEventTypes *string `json:"includeEventTypes,omitempty" tf:"include_event_types,omitempty"`
+
+	// (String) Valid values are create delete pull, thoses values can be comma separated. When Create, Delete, or Pull is set, Harbor will include audit logs for those operations in the purge. (starting with Harbor 2.13 this parameter has been replaced by include_event_types)
 	IncludeOperations *string `json:"includeOperations,omitempty" tf:"include_operations,omitempty"`
 
 	// (String) Sets the schedule how often the Garbage Collection will run.  Can be to "Hourly", "Daily", "Weekly" or can be a custom cron string ie, "5 4 * * *"
@@ -50,7 +56,11 @@ type PurgeAuditLogParameters struct {
 	// +kubebuilder:validation:Optional
 	AuditRetentionHour *float64 `json:"auditRetentionHour,omitempty" tf:"audit_retention_hour,omitempty"`
 
-	// (String) Valid values are create delete pull, thoses values can be comma separated. When Create, Delete, or Pull is set, Harbor will include audit logs for those operations in the purge.
+	// (String) Valid values are push, pull, delete, those values can be comma separated. When Push, Pull, or Delete is set, Harbor will include audit logs for those events in the purge (minimal version Harbor 2.13).
+	// +kubebuilder:validation:Optional
+	IncludeEventTypes *string `json:"includeEventTypes,omitempty" tf:"include_event_types,omitempty"`
+
+	// (String) Valid values are create delete pull, thoses values can be comma separated. When Create, Delete, or Pull is set, Harbor will include audit logs for those operations in the purge. (starting with Harbor 2.13 this parameter has been replaced by include_event_types)
 	// +kubebuilder:validation:Optional
 	IncludeOperations *string `json:"includeOperations,omitempty" tf:"include_operations,omitempty"`
 
@@ -95,7 +105,6 @@ type PurgeAuditLog struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.auditRetentionHour) || (has(self.initProvider) && has(self.initProvider.auditRetentionHour))",message="spec.forProvider.auditRetentionHour is a required parameter"
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.includeOperations) || (has(self.initProvider) && has(self.initProvider.includeOperations))",message="spec.forProvider.includeOperations is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.schedule) || (has(self.initProvider) && has(self.initProvider.schedule))",message="spec.forProvider.schedule is a required parameter"
 	Spec   PurgeAuditLogSpec   `json:"spec"`
 	Status PurgeAuditLogStatus `json:"status,omitempty"`

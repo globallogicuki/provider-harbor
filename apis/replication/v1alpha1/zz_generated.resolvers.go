@@ -8,6 +8,8 @@ package v1alpha1
 import (
 	"context"
 	reference "github.com/crossplane/crossplane-runtime/pkg/reference"
+	v1alpha1 "github.com/globallogicuki/provider-harbor/apis/project/v1alpha1"
+	v1alpha11 "github.com/globallogicuki/provider-harbor/apis/registry/v1alpha1"
 	common "github.com/globallogicuki/provider-harbor/config/common"
 	errors "github.com/pkg/errors"
 	client "sigs.k8s.io/controller-runtime/pkg/client"
@@ -21,13 +23,29 @@ func (mg *Replication) ResolveReferences(ctx context.Context, c client.Reader) e
 	var err error
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.DestNamespace),
+		Extract:      common.ExtractProjectName(),
+		Reference:    mg.Spec.ForProvider.DestNamespaceRef,
+		Selector:     mg.Spec.ForProvider.DestNamespaceSelector,
+		To: reference.To{
+			List:    &v1alpha1.ProjectList{},
+			Managed: &v1alpha1.Project{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.DestNamespace")
+	}
+	mg.Spec.ForProvider.DestNamespace = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.DestNamespaceRef = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromFloatPtrValue(mg.Spec.ForProvider.RegistryID),
 		Extract:      common.ExtractRegistryID(),
 		Reference:    mg.Spec.ForProvider.RegistryIDRef,
 		Selector:     mg.Spec.ForProvider.RegistryIDSelector,
 		To: reference.To{
-			List:    &RegistryList{},
-			Managed: &Registry{},
+			List:    &v1alpha11.RegistryList{},
+			Managed: &v1alpha11.Registry{},
 		},
 	})
 	if err != nil {

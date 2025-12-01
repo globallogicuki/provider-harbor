@@ -25,7 +25,7 @@ type ProjectInitParameters struct {
 	// 123", "CVE-145"] or ["CVE-123"]
 	CveAllowlist []*string `json:"cveAllowlist,omitempty" tf:"cve_allowlist,omitempty"`
 
-	// empty)
+	// (String) Prevent deployment of images with vulnerability severity equal or higher than the specified value. Images must be scanned before this takes effect. Possible values: "critical", "high", "medium", "low", "none". (Default: null)
 	DeploymentSecurity *string `json:"deploymentSecurity,omitempty" tf:"deployment_security,omitempty"`
 
 	// (Boolean) Enables Content Trust for project. When enabled it queries the embedded docker notary server. (Default: false).
@@ -58,7 +58,7 @@ type ProjectObservation struct {
 	// 123", "CVE-145"] or ["CVE-123"]
 	CveAllowlist []*string `json:"cveAllowlist,omitempty" tf:"cve_allowlist,omitempty"`
 
-	// empty)
+	// (String) Prevent deployment of images with vulnerability severity equal or higher than the specified value. Images must be scanned before this takes effect. Possible values: "critical", "high", "medium", "low", "none". (Default: null)
 	DeploymentSecurity *string `json:"deploymentSecurity,omitempty" tf:"deployment_security,omitempty"`
 
 	// (Boolean) Enables Content Trust for project. When enabled it queries the embedded docker notary server. (Default: false).
@@ -102,7 +102,7 @@ type ProjectParameters struct {
 	// +kubebuilder:validation:Optional
 	CveAllowlist []*string `json:"cveAllowlist,omitempty" tf:"cve_allowlist,omitempty"`
 
-	// empty)
+	// (String) Prevent deployment of images with vulnerability severity equal or higher than the specified value. Images must be scanned before this takes effect. Possible values: "critical", "high", "medium", "low", "none". (Default: null)
 	// +kubebuilder:validation:Optional
 	DeploymentSecurity *string `json:"deploymentSecurity,omitempty" tf:"deployment_security,omitempty"`
 

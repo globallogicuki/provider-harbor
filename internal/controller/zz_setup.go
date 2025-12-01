@@ -26,7 +26,7 @@ import (
 	providerconfig "github.com/globallogicuki/provider-harbor/internal/controller/providerconfig"
 	purgeauditlog "github.com/globallogicuki/provider-harbor/internal/controller/purgeauditlog/purgeauditlog"
 	registry "github.com/globallogicuki/provider-harbor/internal/controller/registry/registry"
-	replication "github.com/globallogicuki/provider-harbor/internal/controller/registry/replication"
+	replication "github.com/globallogicuki/provider-harbor/internal/controller/replication/replication"
 	robotaccount "github.com/globallogicuki/provider-harbor/internal/controller/robotaccount/robotaccount"
 	task "github.com/globallogicuki/provider-harbor/internal/controller/tasks/task"
 	user "github.com/globallogicuki/provider-harbor/internal/controller/user/user"

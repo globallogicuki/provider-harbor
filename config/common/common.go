@@ -32,6 +32,10 @@ const (
 	// RegistryIDExtractor is the golang path to ExtractAccessor function
 	// in this package.
 	RegistryIDExtractor = SelfPackagePath + ".ExtractRegistryID()"
+
+	// ProjectNameExtractor is the golang path to ExtractProjectName function
+	// in this package.
+	ProjectNameExtractor = SelfPackagePath + ".ExtractProjectName()"
 )
 
 // ExtractRegistryID extracts the registryId parameter from a registry object
@@ -53,5 +57,24 @@ func ExtractRegistryID() reference.ExtractValueFn {
 			fmt.Printf("unsupported type: %T\n", v)
 			return ""
 		}
+	}
+}
+
+// ExtractProjectName extracts the name parameter from a project object
+func ExtractProjectName() reference.ExtractValueFn {
+	return func(mg resource.Managed) string {
+		paved, err := fieldpath.PaveObject(mg)
+		if err != nil {
+			return ""
+		}
+		r, err := paved.GetValue("status.atProvider.name")
+		if err != nil {
+			return ""
+		}
+		// The name field is a string
+		if s, ok := r.(string); ok {
+			return s
+		}
+		return ""
 	}
 }

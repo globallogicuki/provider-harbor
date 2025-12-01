@@ -1,8 +1,8 @@
-apiVersion: registry.harbor.crossplane.io/v1alpha1
+apiVersion: replication.harbor.crossplane.io/v1alpha1
 kind: Replication
 metadata:
   annotations:
-    meta.upbound.io/example-id: registry/v1alpha1/replication
+    meta.upbound.io/example-id: replication/v1alpha1/replication
   labels:
     testing.upbound.io/example-name: push
   name: push
@@ -20,7 +20,7 @@ apiVersion: registry.harbor.crossplane.io/v1alpha1
 kind: Registry
 metadata:
   annotations:
-    meta.upbound.io/example-id: registry/v1alpha1/replication
+    meta.upbound.io/example-id: replication/v1alpha1/replication
   labels:
     testing.upbound.io/example-name: main
   name: main

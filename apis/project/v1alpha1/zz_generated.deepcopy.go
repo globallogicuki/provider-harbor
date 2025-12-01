@@ -1513,6 +1513,11 @@ func (in *WebhookInitParameters) DeepCopyInto(out *WebhookInitParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.PayloadFormat != nil {
+		in, out := &in.PayloadFormat, &out.PayloadFormat
+		*out = new(string)
+		**out = **in
+	}
 	if in.ProjectID != nil {
 		in, out := &in.ProjectID, &out.ProjectID
 		*out = new(string)
@@ -1616,6 +1621,11 @@ func (in *WebhookObservation) DeepCopyInto(out *WebhookObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.PayloadFormat != nil {
+		in, out := &in.PayloadFormat, &out.PayloadFormat
+		*out = new(string)
+		**out = **in
+	}
 	if in.ProjectID != nil {
 		in, out := &in.ProjectID, &out.ProjectID
 		*out = new(string)
@@ -1679,6 +1689,11 @@ func (in *WebhookParameters) DeepCopyInto(out *WebhookParameters) {
 	}
 	if in.NotifyType != nil {
 		in, out := &in.NotifyType, &out.NotifyType
+		*out = new(string)
+		**out = **in
+	}
+	if in.PayloadFormat != nil {
+		in, out := &in.PayloadFormat, &out.PayloadFormat
 		*out = new(string)
 		**out = **in
 	}

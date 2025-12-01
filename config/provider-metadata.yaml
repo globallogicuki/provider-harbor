@@ -57,6 +57,7 @@ resources:
             oidc_endpoint: (String) The URL of an OIDC-complaint server.
             oidc_group_filter: (String) The OIDC group filter to filter which groups could be onboarded to Harbor.
             oidc_groups_claim: (String) The name of the claim in the token whose values is the list of group names.
+            oidc_logout: '(Boolean) Set to true if you want to enable OIDC Session Logout (Default: false) can only be used with Harbor version v2.13 and above'
             oidc_name: (String) The name of the oidc provider name.
             oidc_scope: (String) The scope sent to OIDC server during authentication. It has to contain “openid”.
             oidc_user_claim: (String) Default is name
@@ -133,7 +134,7 @@ resources:
             delete_untagged: (Boolean) Allow garbage collection on untagged artifacts.
             id: (String) The ID of this resource.
             schedule: (String) Sets the schedule how often the Garbage Collection will run.  Can be to "hourly", "daily", "weekly" or can be a custom cron string ie, "0 5 4 * * *"
-            workers: (Number) Number of workers to run the garbage collection, value must be between 1 and 5.
+            workers: (Number) Number of workers to run the garbage collection, value must be greater than or equal to one. Harbor limits the number of concurrent workers internally, setting this value higher than what Harbor supports will result in an error.
         importStatements: []
     harbor_group:
         subCategory: ""
@@ -306,7 +307,7 @@ resources:
         argumentDocs:
             auto_sbom_generation: '(Boolean) Automatically generate SBOM for images pushed to this project. (Default: false) can only be used with Harbor version v2.11.0 and above'
             cve_allowlist: (List of String) Project allowlist allows vulnerabilities in this list to be ignored in this project when pushing and pulling images. Should be in the format or ["CVE-123", "CVE-145"] or ["CVE-123"]
-            deployment_security: '(String) Prevent deployment of images with vulnerability severity equal or higher than the specified value. Images must be scanned before this takes effect. Possible values: "critical", "high", "medium", "low", "none". (Default: "" - empty)'
+            deployment_security: '(String) Prevent deployment of images with vulnerability severity equal or higher than the specified value. Images must be scanned before this takes effect. Possible values: "critical", "high", "medium", "low", "none". (Default: null)'
             enable_content_trust: '(Boolean) Enables Content Trust for project. When enabled it queries the embedded docker notary server. (Default: false).'
             enable_content_trust_cosign: '(Boolean) Enables Content Trust Cosign for project. When enabled it queries Cosign. (Default: false)'
             force_destroy: (Boolean) A boolean that indicates all repositories should be deleted from the project so that the project can be destroyed without error. These repositories are not recoverable.
@@ -417,6 +418,7 @@ resources:
             id: (String) The ID of this resource.
             name: (String) The name of the webhook that will be created in harbor.
             notify_type: (String) The notification type either http or slack.
+            payload_format: (String) Payload format sent by the webhook. Values are Default or CloudEvents.
             project_id: (String) The project id of the harbor that webhook related to.
             skip_cert_verify: (Boolean) checks the for validate SSL certificate.
         importStatements: []
@@ -435,7 +437,8 @@ resources:
         argumentDocs:
             audit_retention_hour: (Number) To configure how long audit logs should be kept. For example, if you set this to 24 Harbor will only purge audit logs that are 24 or more hours old.
             id: (String) The ID of this resource.
-            include_operations: (String) Valid values are create delete pull, thoses values can be comma separated. When Create, Delete, or Pull is set, Harbor will include audit logs for those operations in the purge.
+            include_event_types: (String) Valid values are push, pull, delete, those values can be comma separated. When Push, Pull, or Delete is set, Harbor will include audit logs for those events in the purge (minimal version Harbor 2.13).
+            include_operations: (String) Valid values are create delete pull, thoses values can be comma separated. When Create, Delete, or Pull is set, Harbor will include audit logs for those operations in the purge. (starting with Harbor 2.13 this parameter has been replaced by include_event_types)
             schedule: (String) Sets the schedule how often the Garbage Collection will run.  Can be to "Hourly", "Daily", "Weekly" or can be a custom cron string ie, "5 4 * * *"
         importStatements: []
     harbor_registry:

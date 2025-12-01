@@ -77,7 +77,10 @@ spec:
                       type: string
                     type: array
                   deploymentSecurity:
-                    description: empty)
+                    description: '(String) Prevent deployment of images with vulnerability
+                      severity equal or higher than the specified value. Images must
+                      be scanned before this takes effect. Possible values: "critical",
+                      "high", "medium", "low", "none". (Default: null)'
                     type: string
                   enableContentTrust:
                     description: '(Boolean) Enables Content Trust for project. When
@@ -208,7 +211,10 @@ spec:
                       type: string
                     type: array
                   deploymentSecurity:
-                    description: empty)
+                    description: '(String) Prevent deployment of images with vulnerability
+                      severity equal or higher than the specified value. Images must
+                      be scanned before this takes effect. Possible values: "critical",
+                      "high", "medium", "low", "none". (Default: null)'
                     type: string
                   enableContentTrust:
                     description: '(Boolean) Enables Content Trust for project. When
@@ -421,7 +427,10 @@ spec:
                       type: string
                     type: array
                   deploymentSecurity:
-                    description: empty)
+                    description: '(String) Prevent deployment of images with vulnerability
+                      severity equal or higher than the specified value. Images must
+                      be scanned before this takes effect. Possible values: "critical",
+                      "high", "medium", "low", "none". (Default: null)'
                     type: string
                   enableContentTrust:
                     description: '(Boolean) Enables Content Trust for project. When
