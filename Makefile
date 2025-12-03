@@ -4,7 +4,7 @@
 PROJECT_NAME ?= provider-harbor
 PROJECT_REPO ?= github.com/globallogicuki/$(PROJECT_NAME)
 
-export TERRAFORM_VERSION ?= 1.10.5
+export TERRAFORM_VERSION ?= 1.14.1
 
 export TERRAFORM_PROVIDER_SOURCE ?= goharbor/harbor
 export TERRAFORM_PROVIDER_REPO ?= https://github.com/goharbor/terraform-provider-harbor
