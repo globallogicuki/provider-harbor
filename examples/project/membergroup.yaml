@@ -1,4 +1,4 @@
-apiVersion: project.harbor.crossplane.io/v1alpha1
+apiVersion: project.buttah.cloud/v1alpha1
 kind: MemberGroup
 metadata:
   annotations:
@@ -16,7 +16,7 @@ spec:
     type: oidc
 
 ---
-apiVersion: project.harbor.crossplane.io/v1alpha1
+apiVersion: project.buttah.cloud/v1alpha1
 kind: Project
 metadata:
   annotations:

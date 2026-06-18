@@ -1,0 +1,33 @@
+apiVersion: project.buttah.m.cloud/v1alpha1
+kind: ImmutableTagRule
+metadata:
+  annotations:
+    meta.upbound.io/example-id: project/v1alpha1/immutabletagrule
+  labels:
+    testing.upbound.io/example-name: main
+  name: main
+  namespace: crossplane-system
+spec:
+  forProvider:
+    disabled: true
+    projectIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: main
+    repoMatching: '**'
+    tagExcluding: latest
+    tagMatching: v2.*
+
+---
+
+apiVersion: project.buttah.m.cloud/v1alpha1
+kind: Project
+metadata:
+  annotations:
+    meta.upbound.io/example-id: project/v1alpha1/immutabletagrule
+  labels:
+    testing.upbound.io/example-name: main
+  name: main
+  namespace: crossplane-system
+spec:
+  forProvider:
+    name: acctest

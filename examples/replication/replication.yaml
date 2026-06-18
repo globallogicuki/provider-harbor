@@ -1,6 +1,6 @@
 ---
 # Create a destination project
-apiVersion: project.harbor.crossplane.io/v1alpha1
+apiVersion: project.buttah.cloud/v1alpha1
 kind: Project
 metadata:
   name: example-dest-project
@@ -11,7 +11,7 @@ spec:
     vulnerabilityScanning: true
 ---
 # Create a registry
-apiVersion: registry.harbor.crossplane.io/v1alpha1
+apiVersion: registry.buttah.cloud/v1alpha1
 kind: Registry
 metadata:
   name: example-registry
@@ -22,7 +22,7 @@ spec:
     endpointUrl: https://hub.docker.com
 ---
 # Create replication policy with cross-resource references
-apiVersion: replication.harbor.crossplane.io/v1alpha1
+apiVersion: replication.buttah.cloud/v1alpha1
 kind: Replication
 metadata:
   name: example-replication

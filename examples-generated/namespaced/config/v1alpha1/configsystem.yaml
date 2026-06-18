@@ -1,0 +1,16 @@
+apiVersion: config.buttah.m.cloud/v1alpha1
+kind: ConfigSystem
+metadata:
+  annotations:
+    meta.upbound.io/example-id: config/v1alpha1/configsystem
+  labels:
+    testing.upbound.io/example-name: main
+  name: main
+  namespace: crossplane-system
+spec:
+  forProvider:
+    notificationEnable: true
+    projectCreationRestriction: adminonly
+    robotNamePrefix: harbor@
+    robotTokenExpiration: 30
+    storagePerProject: 100

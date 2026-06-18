@@ -20,14 +20,14 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/crossplane/crossplane-runtime/pkg/fieldpath"
-	"github.com/crossplane/crossplane-runtime/pkg/reference"
-	"github.com/crossplane/crossplane-runtime/pkg/resource"
+	"github.com/crossplane/crossplane-runtime/v2/pkg/fieldpath"
+	"github.com/crossplane/crossplane-runtime/v2/pkg/reference"
+	"github.com/crossplane/crossplane-runtime/v2/pkg/resource"
 )
 
 const (
 	// SelfPackagePath is the golang path for this package.
-	SelfPackagePath = "github.com/globallogicuki/provider-harbor/config/common"
+	SelfPackagePath = "github.com/buttahtoast/provider-harbor/config/common"
 
 	// RegistryIDExtractor is the golang path to ExtractAccessor function
 	// in this package.

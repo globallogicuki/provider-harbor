@@ -1,4 +1,4 @@
-apiVersion: project.harbor.crossplane.io/v1alpha1
+apiVersion: project.buttah.cloud/v1alpha1
 kind: RetentionPolicy
 metadata:
   annotations:
@@ -21,7 +21,7 @@ spec:
         testing.upbound.io/example-name: main
 
 ---
-apiVersion: project.harbor.crossplane.io/v1alpha1
+apiVersion: project.buttah.cloud/v1alpha1
 kind: Project
 metadata:
   annotations:

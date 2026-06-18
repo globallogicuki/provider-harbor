@@ -1,0 +1,33 @@
+apiVersion: replication.buttah.m.cloud/v1alpha1
+kind: Replication
+metadata:
+  annotations:
+    meta.upbound.io/example-id: replication/v1alpha1/replication
+  labels:
+    testing.upbound.io/example-name: push
+  name: push
+  namespace: crossplane-system
+spec:
+  forProvider:
+    action: push
+    name: test_push
+    registryIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: main
+
+---
+
+apiVersion: registry.buttah.m.cloud/v1alpha1
+kind: Registry
+metadata:
+  annotations:
+    meta.upbound.io/example-id: replication/v1alpha1/replication
+  labels:
+    testing.upbound.io/example-name: main
+  name: main
+  namespace: crossplane-system
+spec:
+  forProvider:
+    endpointUrl: https://hub.docker.com
+    name: test_docker_harbor
+    providerName: docker-hub

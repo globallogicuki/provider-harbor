@@ -20,6 +20,22 @@ resources:
                   "oidc_verify_cert": true,
                   "primary_auth_mode": true
                 }
+            - name: oidc
+              manifest: |-
+                {
+                  "auth_mode": "oidc_auth",
+                  "oidc_admin_group": "administrators",
+                  "oidc_auto_onboard": true,
+                  "oidc_client_id": "OIDC Client ID goes here",
+                  "oidc_client_secret_wo": "OIDC Client Secret goes here",
+                  "oidc_client_secret_wo_version": 1,
+                  "oidc_endpoint": "https://login.microsoftonline.com/{GUID goes here}/v2.0",
+                  "oidc_name": "azure",
+                  "oidc_scope": "openid,email",
+                  "oidc_user_claim": "name",
+                  "oidc_verify_cert": true,
+                  "primary_auth_mode": true
+                }
             - name: ldap
               manifest: |-
                 {
@@ -53,7 +69,9 @@ resources:
             oidc_admin_group: (String) All members of this group get Harbor admin permissions.
             oidc_auto_onboard: (Boolean) Default is "false", set to "true" if you want to skip the user onboarding screen, so user cannot change its username
             oidc_client_id: (String) The client id for the oidc server.
-            oidc_client_secret: (String, Sensitive) The client secert for the oidc server.
+            oidc_client_secret: (String, Sensitive) The client secret for the oidc server.
+            oidc_client_secret_wo: (String, Write-only) Write-only alternative for oidc_client_secret. Must be used together with oidc_client_secret_wo_version.
+            oidc_client_secret_wo_version: (Number) Rotation trigger for write-only OIDC client secret updates. Must be used together with oidc_client_secret_wo.
             oidc_endpoint: (String) The URL of an OIDC-complaint server.
             oidc_group_filter: (String) The OIDC group filter to filter which groups could be onboarded to Harbor.
             oidc_groups_claim: (String) The name of the claim in the token whose values is the list of group names.
@@ -96,6 +114,7 @@ resources:
             - name: main
               manifest: |-
                 {
+                  "notification_enable": true,
                   "project_creation_restriction": "adminonly",
                   "robot_name_prefix": "harbor@",
                   "robot_token_expiration": 30,
@@ -108,6 +127,7 @@ resources:
             from_date: '(String) The date the banner message will start displaying. (Format: MM/DD/YYYY)'
             id: (String) The ID of this resource.
             message: (String) The message to display in the banner.
+            notification_enable: (Boolean) Whether or not webhook/notification functionality is enabled globally. When false, all project-level webhook policies are silently ignored. Defaults to true.
             project_creation_restriction: (String) Who can create projects within Harbor. Can be "adminonly" or "everyone"
             read_only: (Boolean) Whether or not the system is in read only mode.
             robot_name_prefix: (String) Robot account prefix.
@@ -149,8 +169,11 @@ resources:
                   "ldap_group_dn": "storage-group"
                 }
         argumentDocs:
+            "1": = ldap
+            "2": = internal
+            "3": = oidc
             group_name: (String) The name of the group.
-            group_type: '(Number) 3. Note: group type 3 is OIDC group.'
+            group_type: '(Number) The numeric identifier of the group type. Valid values are 1, 2, or 3 :'
             id: (String) The ID of this resource.
             ldap_group_dn: (String) The distinguished name of the group within AD/LDAP.
         importStatements:
@@ -287,6 +310,7 @@ resources:
                   "enable_content_trust_cosign": false,
                   "name": "main",
                   "public": false,
+                  "vulnerability_scanner": "Trivy",
                   "vulnerability_scanning": true
                 }
             - name: main
@@ -314,9 +338,12 @@ resources:
             id: (String) The ID of this resource.
             name: (String) The name of the project that will be created in harbor.
             project_id: (Number) The project id of this resource.
+            proxy_cache_local_on_not_found: '(Boolean) When enabled, serve images from the local cache when they have been removed from the upstream registry. (Default: false) Requires Harbor v2.15.1 or above.'
+            proxy_speed_kb: '(Number) Proxy max speed KB (Default: -1)'
             public: '(Boolean) The project will be public accessibility.(Default: false)'
             registry_id: (Number) To enable project as Proxy Cache.
             storage_quota: (Number) The storage quota of the project in GB's.
+            vulnerability_scanner: (String) The name of the vulnerability scanner to use for this project, overriding the global default scanner. If not set, the project uses the global default scanner configured via harbor_interrogation_services.
             vulnerability_scanning: '(Boolean) Images will be scanned for vulnerabilities when push to harbor. (Default: true)'
         importStatements:
             - terraform import harbor_project.main /projects/1
@@ -341,7 +368,10 @@ resources:
                       "name": "main"
                     }
         argumentDocs:
-            group_id: '(Number) 3. Note: group type 3 is OIDC group.'
+            "1": = ldap
+            "2": = internal
+            "3": = oidc
+            group_id: '(Number) The numeric identifier of the group type. Valid values are 1, 2, or 3 :'
             group_name: (String) The name of the group member entity.
             id: (String) The ID of this resource.
             ldap_group_dn: (String) The distinguished name of the group within AD/LDAP.
@@ -437,8 +467,8 @@ resources:
         argumentDocs:
             audit_retention_hour: (Number) To configure how long audit logs should be kept. For example, if you set this to 24 Harbor will only purge audit logs that are 24 or more hours old.
             id: (String) The ID of this resource.
-            include_event_types: (String) Valid values are push, pull, delete, those values can be comma separated. When Push, Pull, or Delete is set, Harbor will include audit logs for those events in the purge (minimal version Harbor 2.13).
-            include_operations: (String) Valid values are create delete pull, thoses values can be comma separated. When Create, Delete, or Pull is set, Harbor will include audit logs for those operations in the purge. (starting with Harbor 2.13 this parameter has been replaced by include_event_types)
+            include_event_types: (String) Valid values are create, push, pull, delete, create_artifact, delete_artifact, pull_artifact, other, those values can be comma separated. Harbor will include audit logs for those events in the purge (minimal version Harbor 2.13).
+            include_operations: (String) Valid values are create, delete, pull, those values can be comma separated. When Create, Delete, or Pull is set, Harbor will include audit logs for those operations in the purge. (Harbor < 2.13, deprecated in favor of include_event_types)
             schedule: (String) Sets the schedule how often the Garbage Collection will run.  Can be to "Hourly", "Daily", "Weekly" or can be a custom cron string ie, "5 4 * * *"
         importStatements: []
     harbor_registry:
@@ -454,10 +484,13 @@ resources:
                   "provider_name": "docker-hub"
                 }
         argumentDocs:
-            access_id: (String) The username / access id for the external container register.
-            access_secret: (String, Sensitive) The password / access keys / token for the external container register.
+            access_id: (String) The username / access ID for the external container register.
+            access_secret: (String, Sensitive) The password / access key / token for the external container register.
+            ca_certificate: |-
+                (String) PEM-encoded CA certificate trusting the registry custom-signed certificate.
+                (ignored in <2.15.0)
             description: (String) The description of the external container register.
-            endpoint_url: (String) The url endpoint for the external container register ie "https://hub.docker.com"
+            endpoint_url: (String) The URL endpoint for the external container register i.e. "https://hub.docker.com"
             id: (String) The ID of this resource.
             insecure: '(Boolean) Verifies the certificate of the external container register. (Default: false)'
             name: (String) The name of the register.
@@ -552,7 +585,7 @@ resources:
             deletion: '(Boolean) Specify whether to delete the remote resources when locally deleted. (Default: false)'
             description: (String) Description of the replication policy.
             dest_namespace: (String) Specify the destination namespace. if empty, the resource will be put under the same namespace as the source.
-            dest_namespace_replace: '(Number) Specify the destination namespace flattening policy. Integers from -1 to 3 are valid values in the harbor API. A value of -1 will ''Flatten All Levels'', 0 means ''No Flattening'', 1 ''Flatten 1 Level'', 2 ''Flatten 2 Levels'', 3 ''Flatten 3 Levels'' (Default: -1, see Replication Rules for more details)'
+            dest_namespace_replace: '(Number) Specify the destination namespace flattening policy. Integers from -1 to 3 are valid values in the harbor API. A value of -1 will ''Flatten All Levels'', 0 means ''No Flattening'', 1 ''Flatten 1 Level'', 2 ''Flatten 2 Levels'', 3 ''Flatten 3 Levels'' (Default: 0, see Replication Rules for more details)'
             enabled: '(Boolean) Specify whether the replication is enabled. (Default: true)'
             execute_on_changed: '(Boolean) Specify whether to execute the replication rule if new or modified. (Default: false)'
             filters: (Block Set) (see below for nested schema)
@@ -564,6 +597,7 @@ resources:
             replication_policy_id: (Number)
             resource: (String) Filter on the resource type. Can be one of the following types. chart, artifact
             schedule: '(String) The scheduled time of when the container register will be push / pull. In cron base format. Hourly "0 0 * * * *", Daily "0 0 0 * * *", Monthly "0 0 0 * * 0". Can be one of the following: event_based, manual, cron format (Default: manual)'
+            single_active_replication: '(Boolean), prevent parallel runs under the same replication. (Default: false)'
             speed: (Number) The Maximum network bandwidth in Kbps for each execution. Default is -1 (unlimited).
             tag: (String) Filter on the tag/version of the resource.
         importStatements:
@@ -704,6 +738,70 @@ resources:
                     {
                       "name": "main"
                     }
+            - name: project
+              manifest: |-
+                {
+                  "description": "project level robot account",
+                  "level": "project",
+                  "name": "example-project",
+                  "permissions": [
+                    {
+                      "access": [
+                        {
+                          "action": "pull",
+                          "resource": "repository"
+                        },
+                        {
+                          "action": "push",
+                          "resource": "repository"
+                        }
+                      ],
+                      "kind": "project",
+                      "namespace": "${harbor_project.main.name}"
+                    }
+                  ],
+                  "secret_wo": "StrongSecret123!",
+                  "secret_wo_version": 1
+                }
+              references:
+                permissions.namespace: harbor_project.main.name
+              dependencies:
+                harbor_project.main: |-
+                    {
+                      "name": "main"
+                    }
+            - name: project
+              manifest: |-
+                {
+                  "description": "project level robot account",
+                  "level": "project",
+                  "name": "example-project",
+                  "permissions": [
+                    {
+                      "access": [
+                        {
+                          "action": "pull",
+                          "resource": "repository"
+                        },
+                        {
+                          "action": "push",
+                          "resource": "repository"
+                        }
+                      ],
+                      "kind": "project",
+                      "namespace": "${harbor_project.main.name}"
+                    }
+                  ],
+                  "secret_wo": "${tostring(ephemeral.random_password.robot_secret.result)}",
+                  "secret_wo_version": 1
+                }
+              references:
+                permissions.namespace: harbor_project.main.name
+              dependencies:
+                harbor_project.main: |-
+                    {
+                      "name": "main"
+                    }
         argumentDocs:
             access: '(Block Set, Min: 1) (see below for nested schema)'
             action: (String) Eg. push, pull, read, etc. Check available actions.
@@ -721,6 +819,8 @@ resources:
             resource: (String) Eg. repository, labels, etc. Check available resources.
             robot_id: (String)
             secret: (String, Sensitive) The secret of the robot account used for authentication. Defaults to random generated string from Harbor.
+            secret_wo: (String, Write-only) Write-only alternative for secret. Must be used together with secret_wo_version.
+            secret_wo_version: (Number) Rotation trigger for write-only secret updates. Must be used together with secret_wo.
         importStatements:
             - terraform import harbor_robot_account.system /robots/123
     harbor_tasks:
@@ -750,13 +850,33 @@ resources:
                   "password": "Password12345!",
                   "username": "john"
                 }
+            - name: main
+              manifest: |-
+                {
+                  "email": "john@smith.com",
+                  "full_name": "John Smith",
+                  "password_wo": "Password12345!",
+                  "password_wo_version": 1,
+                  "username": "john"
+                }
+            - name: main
+              manifest: |-
+                {
+                  "email": "john@smith.com",
+                  "full_name": "John Smith",
+                  "password_wo": "${tostring(ephemeral.random_password.user_password.result)}",
+                  "password_wo_version": 1,
+                  "username": "john"
+                }
         argumentDocs:
             admin: '(Boolean) If the user will have admin rights within Harbor (Default: false)'
             comment: (String) Any comments for that are need for the internal user.
             email: (String) The email address of the internal user.
             full_name: (String) The Full Name of the internal user.
             id: (String) The ID of this resource.
-            password: (String, Sensitive) The password for the internal user.
+            password: (String, Sensitive) The password for the internal user. Conflicts with password_wo_version.
+            password_wo: (String, Write-only) Write-only alternative for password. Must be used together with password_wo_version.
+            password_wo_version: (Number) Rotation trigger for write-only password updates. Must be used together with password_wo.
             username: (String) The username of the internal user.
         importStatements:
             - terraform import harbor_user.main /users/19

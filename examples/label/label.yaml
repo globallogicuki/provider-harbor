@@ -1,4 +1,4 @@
-apiVersion: label.harbor.crossplane.io/v1alpha1
+apiVersion: label.buttah.cloud/v1alpha1
 kind: Label
 metadata:
   annotations:

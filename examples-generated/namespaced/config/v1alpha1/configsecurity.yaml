@@ -1,0 +1,15 @@
+apiVersion: config.buttah.m.cloud/v1alpha1
+kind: ConfigSecurity
+metadata:
+  annotations:
+    meta.upbound.io/example-id: config/v1alpha1/configsecurity
+  labels:
+    testing.upbound.io/example-name: main
+  name: main
+  namespace: crossplane-system
+spec:
+  forProvider:
+    cveAllowlist:
+    - CVE-456
+    - CVE-123
+    expiresAt: "1701167767"

@@ -3,4 +3,4 @@ kind: Provider
 metadata:
   name: provider-harbor
 spec:
-  package: globallogicuki/provider-harbor:v0.1.0
+  package: buttahtoast/provider-harbor:v0.1.0

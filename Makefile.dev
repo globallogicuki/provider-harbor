@@ -123,7 +123,7 @@ dev-setup-provider:
 	@kubectl apply -f package/crds/ >/dev/null
 	@echo "⏳ Waiting for CRDs to be established..."
 	@sleep 3
-	@kubectl wait --for condition=established --timeout=60s crd/providerconfigs.harbor.crossplane.io 2>/dev/null || true
+	@kubectl wait --for condition=established --timeout=60s crd/providerconfigs.buttah.cloud 2>/dev/null || true
 	@echo "Creating ProviderConfig with local Harbor credentials..."
 	@mkdir -p .work/dev
 	@printf 'apiVersion: v1\n' > .work/dev/provider-secret.yaml
@@ -140,7 +140,7 @@ dev-setup-provider:
 	@printf '      "url": "%s"\n' "$(LOCAL_HARBOR_URL)" >> .work/dev/provider-secret.yaml
 	@printf '    }\n' >> .work/dev/provider-secret.yaml
 	@kubectl apply -f .work/dev/provider-secret.yaml >/dev/null
-	@printf 'apiVersion: harbor.crossplane.io/v1beta1\n' > .work/dev/providerconfig.yaml
+	@printf 'apiVersion: buttah.cloud/v1beta1\n' > .work/dev/providerconfig.yaml
 	@printf 'kind: ProviderConfig\n' >> .work/dev/providerconfig.yaml
 	@printf 'metadata:\n' >> .work/dev/providerconfig.yaml
 	@printf '  name: default\n' >> .work/dev/providerconfig.yaml

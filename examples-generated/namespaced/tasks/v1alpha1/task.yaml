@@ -1,0 +1,12 @@
+apiVersion: tasks.buttah.m.cloud/v1alpha1
+kind: Task
+metadata:
+  annotations:
+    meta.upbound.io/example-id: tasks/v1alpha1/task
+  labels:
+    testing.upbound.io/example-name: main
+  name: main
+  namespace: crossplane-system
+spec:
+  forProvider:
+    vulnerabilityScanPolicy: daily

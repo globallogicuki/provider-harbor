@@ -1,4 +1,4 @@
-apiVersion: project.harbor.crossplane.io/v1alpha1
+apiVersion: project.buttah.cloud/v1alpha1
 kind: Project
 metadata:
   name: crossplane-project

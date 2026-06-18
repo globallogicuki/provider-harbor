@@ -1,0 +1,14 @@
+apiVersion: purgeauditlog.buttah.m.cloud/v1alpha1
+kind: PurgeAuditLog
+metadata:
+  annotations:
+    meta.upbound.io/example-id: purgeauditlog/v1alpha1/purgeauditlog
+  labels:
+    testing.upbound.io/example-name: main
+  name: main
+  namespace: crossplane-system
+spec:
+  forProvider:
+    auditRetentionHour: 24
+    includeOperations: create,pull
+    schedule: Daily

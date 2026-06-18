@@ -12,7 +12,7 @@ stringData:
       "password": <password>
     }
 ---
-apiVersion: harbor.crossplane.io/v1beta1
+apiVersion: buttah.cloud/v1beta1
 kind: ProviderConfig
 metadata:
   name: default 
